@@ -5,11 +5,13 @@ Layout expected next to this script:
 
     site.yaml               shared settings (base_url, pricing, newsletter links, common FAQ)
     businesses/*.yaml       one file per business
-    templates/              page.html.j2, llms.txt.j2, index.html.j2
+    templates/              page.html.j2, llms.txt.j2, index.html.j2, index.llms.txt.j2
 
 Output (default: dist/):
 
-    dist/index.html                 overview page       -> <base_url>
+    dist/index.html                 home page           -> <base_url>
+    dist/llms.txt                   catalogue of every service, for AI agents
+    dist/tools.json                 every tool definition in one file
     dist/<slug>/index.html          the business page   -> <base_url><slug>/
     dist/<slug>/llms.txt            plain-text summary for AI agents
     dist/<slug>/tools.json          MCP-style tool definition with example (mockup)
@@ -119,6 +121,16 @@ def validate(businesses: list[dict]) -> None:
         raise BuildError("\n".join(errors))
 
 
+def validate_groups(site: dict, businesses: list[dict]) -> None:
+    slugs = {b["slug"] for b in businesses}
+    seen: list[str] = [s for g in site["home"]["groups"] for s in g["slugs"]]
+    errors = [f"site.yaml: home.groups lists unknown slug '{s}'" for s in seen if s not in slugs]
+    errors += [f"site.yaml: home.groups lists '{s}' more than once" for s in set(seen) if seen.count(s) > 1]
+    errors += [f"site.yaml: home.groups is missing '{s}'" for s in sorted(slugs - set(seen))]
+    if errors:
+        raise BuildError("\n".join(errors))
+
+
 # ---------------------------------------------------------------- helpers
 
 def paragraphs(text: str) -> list[str]:
@@ -136,26 +148,27 @@ def pretty(obj) -> str:
 
 
 def tools_json(b: dict) -> dict:
+    return {"x-status": "static mockup, not a live MCP server", "tools": [tool_def(b)]}
+
+
+def tool_def(b: dict) -> dict:
     tool = b["demo"]["tool"]
     return {
-        "x-status": "static mockup, not a live MCP server",
-        "tools": [{
-            "name": tool["name"],
-            "description": tool["description"],
-            "inputSchema": {
-                "type": "object",
-                "properties": {
-                    i["name"]: {"type": i["type"], "description": i["description"]}
-                    for i in tool["inputs"]
-                },
-                "required": [i["name"] for i in tool["inputs"] if i.get("required")],
+        "name": tool["name"],
+        "description": tool["description"],
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                i["name"]: {"type": i["type"], "description": i["description"]}
+                for i in tool["inputs"]
             },
-            "x-returns": tool["returns"],
-            "x-example": {
-                "arguments": b["demo"]["example_request"],
-                "result": b["demo"]["example_response"],
-            },
-        }],
+            "required": [i["name"] for i in tool["inputs"] if i.get("required")],
+        },
+        "x-returns": tool["returns"],
+        "x-example": {
+            "arguments": b["demo"]["example_request"],
+            "result": b["demo"]["example_response"],
+        },
     }
 
 
@@ -179,6 +192,7 @@ def build(args: argparse.Namespace) -> None:
     site = load_yaml(args.site)
     businesses = load_businesses(args.businesses)
     validate(businesses)
+    validate_groups(site, businesses)
 
     base_url = site["base_url"].rstrip("/") + "/"
     suffix = "index.html" if args.local else ""
@@ -200,11 +214,15 @@ def build(args: argparse.Namespace) -> None:
     page_tpl = env.get_template("page.html.j2")
     llms_tpl = env.get_template("llms.txt.j2")
     index_tpl = env.get_template("index.html.j2")
+    index_llms_tpl = env.get_template("index.llms.txt.j2")
 
     by_slug = {b["slug"]: b for b in businesses}
     siblings = [
-        {"slug": b["slug"], "name": b["name"], "tagline": b["tagline"], "accent": b["accent"],
-         "signature": signature(b["demo"]["tool"]), "url": url_for(b["slug"])}
+        {"slug": b["slug"], "name": b["name"], "tagline": b["tagline"], "audience": b["audience"],
+         "accent": b["accent"], "accent_dark": b.get("accent_dark") or b["accent"],
+         "tool": b["demo"]["tool"]["name"], "description": b["demo"]["tool"]["description"],
+         "signature": signature(b["demo"]["tool"]), "url": url_for(b["slug"]),
+         "page_url": f"{base_url}{b['slug']}/"}
         for b in businesses
     ]
 
@@ -242,9 +260,33 @@ def build(args: argparse.Namespace) -> None:
         (folder / "tools.json").write_text(pretty(tools_json(b)) + "\n", encoding="utf-8")
         print(f"built {b['slug']:<12} -> {folder.relative_to(out.parent) if out.parent in folder.parents else folder}")
 
-    root_siblings = [dict(s, url=url_for(s["slug"], prefix="")) for s in siblings]
-    (out / "index.html").write_text(
-        index_tpl.render(site=site, siblings=root_siblings, base_url=base_url), encoding="utf-8")
+    root = {s["slug"]: dict(s, url=url_for(s["slug"], prefix="")) for s in siblings}
+    groups = [{"title": g["title"], "services": [root[s] for s in g["slugs"]]}
+              for g in site["home"]["groups"]]
+    home_ctx = {
+        "site": site, "home": site["home"], "groups": groups, "base_url": base_url,
+        "count": len(businesses),
+        "faq": list(site["home"].get("faq", [])) + list(site.get("common_faq", [])),
+        "json_ld": {
+            "@context": "https://schema.org",
+            "@type": "Organization",
+            "name": site["family_name"],
+            "description": site["family_tagline"],
+            "url": base_url,
+            "makesOffer": [
+                {"@type": "Offer", "price": "0", "priceCurrency": "EUR",
+                 "itemOffered": {"@type": "Service", "name": s["name"],
+                                 "description": s["tagline"], "url": s["page_url"]}}
+                for s in siblings
+            ],
+        },
+    }
+    (out / "index.html").write_text(index_tpl.render(home_ctx), encoding="utf-8")
+    (out / "llms.txt").write_text(index_llms_tpl.render(home_ctx), encoding="utf-8")
+    (out / "tools.json").write_text(pretty({
+        "x-status": "static mockup, not a live MCP server",
+        "tools": [dict(tool_def(b), **{"x-page": f"{base_url}{b['slug']}/"}) for b in businesses],
+    }) + "\n", encoding="utf-8")
     (out / ".nojekyll").write_text("", encoding="utf-8")
     print(f"built index        -> {out / 'index.html'}")
 

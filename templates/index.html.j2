@@ -3,63 +3,231 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>{{ site.family_name }}</title>
+<title>{{ site.family_name }} | {{ home.headline }}</title>
 <meta name="description" content="{{ site.family_tagline }}">
 <meta property="og:title" content="{{ site.family_name }}">
-<meta property="og:description" content="{{ site.family_tagline }}">
+<meta property="og:description" content="{{ home.headline }}">
 <meta property="og:type" content="website">
 <meta property="og:url" content="{{ base_url }}">
 <link rel="canonical" href="{{ base_url }}">
+<link rel="alternate" type="text/plain" title="llms.txt" href="llms.txt">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script type="application/ld+json">{{ json_ld | tojson }}</script>
 <style>
 :root {
   --bg: #f3f5f8; --surface: #ffffff; --ink: #17203a; --muted: #56607a; --line: #d9dee8;
+  --brand: #3b3fd8; --brand-ink: #ffffff;
+  --brand-soft: color-mix(in srgb, var(--brand) 9%, var(--surface));
   --sans: "Instrument Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
-  --mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
+  --mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --measure: 66ch; --wide: 1080px;
 }
 @media (prefers-color-scheme: dark) {
-  :root { --bg: #10162a; --surface: #182038; --ink: #e8ecf5; --muted: #a3acc2; --line: #2b3552; }
+  :root {
+    --bg: #10162a; --surface: #182038; --ink: #e8ecf5; --muted: #a3acc2; --line: #2b3552;
+    --brand: #a5b4fc; --brand-ink: #0b1020;
+  }
+  .card { --accent: var(--accent-dark); }
 }
 *, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
 body { margin: 0; background: var(--bg); color: var(--ink); font: 400 1.0625rem/1.6 var(--sans); }
-.wrap { max-width: 1080px; margin: 0 auto; padding: 48px 16px 64px; }
-@media (min-width: 720px) { .wrap { padding: 72px 32px 80px; } }
-h1 { font-size: clamp(2.2rem, 6vw, 3.6rem); line-height: 1.1; letter-spacing: -0.025em; margin: 0; max-width: 20ch; }
-.lede { color: var(--muted); font-size: 1.2rem; max-width: 60ch; margin: 20px 0 48px; }
+a { color: inherit; text-underline-offset: 3px; }
+a:focus-visible { outline: 3px solid var(--brand); outline-offset: 3px; }
+.wrap { max-width: var(--wide); margin: 0 auto; padding: 0 16px; }
+@media (min-width: 720px) { .wrap { padding: 0 32px; } }
+section { padding: 56px 0; border-top: 1px solid var(--line); }
+h1, h2, h3 { line-height: 1.15; margin: 0; letter-spacing: -0.01em; }
+h2 { font-size: 1.75rem; font-weight: 600; margin-bottom: 12px; }
+h3 { font-size: 1.125rem; font-weight: 600; }
+p { margin: 0 0 1em; max-width: var(--measure); }
+.sub { color: var(--muted); margin-bottom: 28px; }
+
+/* Top bar */
+.topbar { display: flex; justify-content: space-between; align-items: center; gap: 16px; padding: 20px 0; font-size: .95rem; }
+.brand { font-weight: 700; text-decoration: none; letter-spacing: -0.01em; }
+.topbar nav { display: flex; gap: 20px; color: var(--muted); }
+.topbar nav a { text-decoration: none; white-space: nowrap; }
+@media (max-width: 520px) { .topbar nav { gap: 14px; font-size: .9rem; } .topbar nav .optional { display: none; } }
+.topbar nav a:hover { color: var(--ink); }
+
+/* Hero */
+.hero { padding-top: 40px; padding-bottom: 64px; }
+.hero h1 { font-size: clamp(2.3rem, 6.2vw, 4.2rem); font-weight: 700; max-width: 17ch; letter-spacing: -0.03em; }
+.hero .intro { margin-top: 24px; }
+.hero .intro p { color: var(--muted); font-size: 1.2rem; }
+.actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 28px; }
+.btn { display: inline-block; padding: 12px 20px; border-radius: 6px; font-weight: 600; text-decoration: none; border: 2px solid var(--brand); }
+.btn.primary { background: var(--brand); color: var(--brand-ink); }
+.btn.secondary { color: var(--ink); }
+
+/* Two audiences */
+.who { display: grid; gap: 16px; margin-top: 48px; }
+@media (min-width: 760px) { .who { grid-template-columns: 1fr 1fr; } }
+.who > div { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 24px; }
+.who h2 { font-size: 1.15rem; margin-bottom: 8px; }
+.who p { margin: 0; color: var(--muted); }
+.who .agents { background: var(--brand-soft); border-color: var(--brand); }
+.who code { font: 400 .9em var(--mono); }
+
+/* Services */
+.group + .group { margin-top: 44px; }
+.group h3 { font-size: .9rem; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); margin-bottom: 16px; }
 .grid { list-style: none; padding: 0; margin: 0; display: grid; gap: 16px; }
 @media (min-width: 640px) { .grid { grid-template-columns: repeat(2, 1fr); } }
 @media (min-width: 980px) { .grid { grid-template-columns: repeat(3, 1fr); } }
-.grid a {
-  display: block; height: 100%; text-decoration: none; color: inherit; background: var(--surface);
-  border: 1px solid var(--line); border-top: 4px solid var(--accent); border-radius: 8px; padding: 20px;
+.card {
+  position: relative; display: flex; flex-direction: column; height: 100%;
+  background: var(--surface); border: 1px solid var(--line); border-top: 4px solid var(--accent);
+  border-radius: 8px; padding: 20px;
 }
-.grid a:hover, .grid a:focus-visible { border-color: var(--accent); }
-.grid a:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
-.grid h2 { font-size: 1.15rem; margin: 0 0 8px; }
-.grid p { margin: 0; color: var(--muted); font-size: .98rem; }
-.grid code { display: block; margin-top: 14px; font: 400 .8rem/1.4 var(--mono); color: var(--muted); overflow-wrap: anywhere; }
-.updates { margin-top: 56px; padding-top: 32px; border-top: 1px solid var(--line); }
-.updates a { margin-right: 16px; font-weight: 600; color: inherit; text-underline-offset: 3px; }
+.card:hover, .card:focus-within { border-color: var(--accent); }
+.card h4 { font-size: 1.15rem; margin: 0 0 8px; }
+.card h4 a { text-decoration: none; }
+.card h4 a::after { content: ""; position: absolute; inset: 0; border-radius: 8px; }
+.card .tagline { margin: 0 0 10px; }
+.card .aud { margin: 0; color: var(--muted); font-size: .92rem; }
+.card code { display: block; margin-top: auto; padding-top: 14px; font: 400 .8rem/1.4 var(--mono); color: var(--muted); overflow-wrap: anywhere; }
+
+/* Agents */
+.endpoints { display: grid; gap: 12px; margin: 24px 0 0; }
+@media (min-width: 760px) { .endpoints { grid-template-columns: repeat(3, 1fr); } }
+.endpoints > div { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 18px 20px; }
+.endpoints dt { font: 500 .95rem/1.4 var(--mono); }
+.endpoints dd { margin: 6px 0 0; color: var(--muted); font-size: .95rem; }
+
+/* Pricing, FAQ, updates */
+.price { font-size: clamp(1.8rem, 4vw, 2.6rem); font-weight: 700; color: var(--brand); margin-bottom: 12px; }
+.faq details { border-bottom: 1px solid var(--line); padding: 16px 0; max-width: 80ch; }
+.faq summary { cursor: pointer; font-weight: 600; font-size: 1.05rem; }
+.faq details p { margin: 10px 0 0; color: var(--muted); }
+.updates { background: var(--brand-soft); }
+.updates .actions { margin-top: 20px; }
+footer { padding: 32px 0 48px; border-top: 1px solid var(--line); font-size: .95rem; color: var(--muted); }
+
+@media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth; } }
 </style>
 </head>
 <body>
-<main class="wrap">
-  <h1>{{ site.family_name }}</h1>
-  <p class="lede">{{ site.family_tagline }}</p>
-  <ul class="grid">
-    {% for s in siblings %}
-    <li><a href="{{ s.url }}" style="--accent: {{ s.accent }}">
-      <h2>{{ s.name }}</h2>
-      <p>{{ s.tagline }}</p>
-      <code>{{ s.signature }}</code>
-    </a></li>
-    {% endfor %}
-  </ul>
-  <p class="updates">{{ site.newsletter.headline }}:
-    {% for l in site.newsletter.links %}<a href="{{ l.url }}" rel="noopener">{{ l.label }}</a>{% endfor %}
-  </p>
+
+<div class="wrap">
+  <header class="topbar">
+    <a class="brand" href="./">{{ site.family_name }}</a>
+    <nav aria-label="Sections">
+      <a href="#services">Services</a>
+      <a href="#agents">For agents</a>
+      <a class="optional" href="#updates">Updates</a>
+    </nav>
+  </header>
+</div>
+
+<main>
+  <div class="wrap hero">
+    <h1>{{ home.headline }}</h1>
+    <div class="intro">
+      {% for para in home.intro | paragraphs %}
+      <p>{{ para }}</p>
+      {% endfor %}
+    </div>
+    <div class="actions">
+      <a class="btn primary" href="#services">See the {{ count }} services</a>
+      <a class="btn secondary" href="#updates">Get early access</a>
+    </div>
+    <div class="who">
+      <div>
+        <h2>{{ home.for_people.title }}</h2>
+        <p>{{ home.for_people.text }}</p>
+      </div>
+      <div class="agents">
+        <h2>{{ home.for_agents.title }}</h2>
+        <p>{{ home.for_agents.text }}</p>
+      </div>
+    </div>
+  </div>
+
+  <section id="services" aria-labelledby="services-h">
+    <div class="wrap">
+      <h2 id="services-h">Services</h2>
+      <p class="sub">Each one solves a single problem. Open a service to see how it works, who it is for and a demo of the tool your agent would call.</p>
+      {% for g in groups %}
+      <div class="group">
+        <h3>{{ g.title }}</h3>
+        <ul class="grid">
+          {% for s in g.services %}
+          <li class="card" style="--accent: {{ s.accent }}; --accent-dark: {{ s.accent_dark }}">
+            <h4><a href="{{ s.url }}">{{ s.name }}</a></h4>
+            <p class="tagline">{{ s.tagline }}</p>
+            <p class="aud">{{ s.audience }}</p>
+            <code>{{ s.signature }}</code>
+          </li>
+          {% endfor %}
+        </ul>
+      </div>
+      {% endfor %}
+    </div>
+  </section>
+
+  <section id="agents" aria-labelledby="agents-h">
+    <div class="wrap">
+      <h2 id="agents-h">For agents</h2>
+      <p class="sub">Everything here is published in plain text and JSON as well as HTML, so an agent can find the right service and call it without reading a web page.</p>
+      <dl class="endpoints">
+        <div>
+          <dt><a href="llms.txt">/llms.txt</a></dt>
+          <dd>The catalogue: what each service does, who it is for and its tool signature.</dd>
+        </div>
+        <div>
+          <dt><a href="tools.json">/tools.json</a></dt>
+          <dd>All {{ count }} tool definitions with input schemas and a worked example each.</dd>
+        </div>
+        <div>
+          <dt>/&lt;service&gt;/tools.json</dt>
+          <dd>One service's definition, next to its page and its own llms.txt.</dd>
+        </div>
+      </dl>
+    </div>
+  </section>
+
+  <section aria-labelledby="price-h">
+    <div class="wrap">
+      <h2 id="price-h">Pricing</h2>
+      <p class="price">{{ site.pricing.headline }}</p>
+      <p>{{ site.pricing.text }}</p>
+    </div>
+  </section>
+
+  <section class="faq" aria-labelledby="faq-h">
+    <div class="wrap">
+      <h2 id="faq-h">Questions</h2>
+      {% for item in faq %}
+      <details>
+        <summary>{{ item.q }}</summary>
+        <p>{{ item.a }}</p>
+      </details>
+      {% endfor %}
+    </div>
+  </section>
+
+  <section id="updates" class="updates" aria-labelledby="updates-h">
+    <div class="wrap">
+      <h2 id="updates-h">{{ site.newsletter.headline }}</h2>
+      <p>{{ site.newsletter.text }}</p>
+      <div class="actions">
+        {% for l in site.newsletter.links %}
+        <a class="btn {{ 'primary' if loop.first else 'secondary' }}" href="{{ l.url }}" rel="noopener">Follow on {{ l.label }}</a>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
 </main>
+
+<footer>
+  <div class="wrap">
+    <p>{{ site.family_name }}: {{ site.family_tagline }} Contact: <a href="mailto:{{ site.contact_email }}">{{ site.contact_email }}</a></p>
+  </div>
+</footer>
+
 </body>
 </html>

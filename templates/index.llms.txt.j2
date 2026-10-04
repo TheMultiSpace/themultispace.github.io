@@ -1,0 +1,41 @@
+# {{ site.family_name }}
+
+> {{ home.headline }}
+
+{{ home.intro | trim }}
+
+Status: Concept (static mockups, no live servers yet)
+Pricing: {{ site.pricing.headline }}
+Home: {{ base_url }}
+All tool definitions: {{ base_url }}tools.json
+
+Each service below is one tool. Its page explains it for people; its llms.txt and
+tools.json describe it for agents.
+
+{% for g in groups %}
+## {{ g.title }}
+
+{% for s in g.services %}
+### {{ s.name }}
+
+{{ s.tagline }} {{ s.audience }}
+
+Tool: {{ s.signature }}
+{{ s.description }}
+
+- Page: {{ s.page_url }}
+- Summary: {{ s.page_url }}llms.txt
+- Definition: {{ s.page_url }}tools.json
+
+{% endfor %}
+{% endfor %}
+## Questions
+
+{% for item in faq %}- {{ item.q }} {{ item.a }}
+{% endfor %}
+
+## Updates
+
+{% for l in site.newsletter.links %}- {{ l.label }}: {{ l.url }}
+{% endfor %}
+Contact: {{ site.contact_email }}

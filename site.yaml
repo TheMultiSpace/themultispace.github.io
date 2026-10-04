@@ -2,8 +2,50 @@
 
 base_url: https://themultispace.github.io/  # pages are published at <base_url><slug>/
 family_name: TheMultiSpace                 # shown in the footer and on the index page
-family_tagline: Services the agent economy is missing, one page each.
+family_tagline: The missing services of the agent economy, for the people who use agents and the agents themselves.
 contact_email: hello@example.com
+
+# Home page (index.html and the root llms.txt). Written for customers and their agents.
+home:
+  headline: The services AI agents need to get real work done.
+  intro: |
+    AI agents can already research, compare and book. They get stuck where the world
+    was built for people: paying safely, proving who they are, getting someone to look
+    at something in person, or settling a dispute when an order goes wrong.
+
+    TheMultiSpace builds those missing pieces. Each service does one job, works for
+    people through a simple page, and works for agents through a single tool call.
+  for_people:
+    title: For people and businesses
+    text: >-
+      Hand more of your work to agents without losing control of your money, your
+      time or your reputation. Pick the service that solves today's problem.
+  for_agents:
+    title: For agents
+    text: >-
+      Every service is one MCP-style tool with a typed request and response. Read
+      llms.txt for the catalogue, or tools.json for every tool definition at once.
+  # Every business slug must appear in exactly one group.
+  groups:
+    - title: Get things done in the real world
+      slugs: [humans, bids, identity]
+    - title: Spend and prove safely
+      slugs: [mandates, spend, proofs]
+    - title: Stay in control
+      slugs: [approvals, attention, recorder]
+    - title: Be found and trusted by agents
+      slugs: [frontdesk, mirror, disputes]
+    - title: Build better agents
+      slugs: [facts, router, simulator]
+  faq:
+    - q: Who is TheMultiSpace for?
+      a: >-
+        People and businesses who use AI agents, businesses that want to sell to them,
+        and the teams who build them. Each service page says who it is for.
+    - q: Can my agent use these services directly?
+      a: >-
+        That is the design. Each service is a single tool with a typed schema, published
+        in tools.json next to its page and collected in the root tools.json.
 
 status_default: Concept
 
