@@ -3,24 +3,23 @@
 
 Layout expected next to this script:
 
-    site.yaml               shared settings (base_url, pricing, newsletter links, common FAQ)
+    site.yaml               shared settings (domain, pricing, newsletter links, common FAQ)
     businesses/*.yaml       one file per business
     templates/              page.html.j2, llms.txt.j2, index.html.j2
 
 Output (default: dist/):
 
-    dist/index.html                 overview page       -> <base_url>
-    dist/<slug>/index.html          the business page   -> <base_url><slug>/
+    dist/index.html                 overview page for the root domain
+    dist/<slug>/index.html          the business page   -> https://<slug>.<domain>/
     dist/<slug>/llms.txt            plain-text summary for AI agents
     dist/<slug>/tools.json          MCP-style tool definition with example (mockup)
 
-dist/ is published as-is to GitHub Pages (see .github/workflows/pages.yml).
-Links between pages are relative; canonical URLs use base_url from site.yaml.
+Each dist/<slug>/ folder is meant to be served as the root of its subdomain.
 
 Usage:
     pip install pyyaml jinja2
-    python build.py                 # links like ../<slug>/, for serving over HTTP
-    python build.py --local         # links like ../<slug>/index.html, for opening from disk
+    python build.py                 # links point to https://<slug>.<domain>/
+    python build.py --local         # links point to sibling folders, for previewing from disk
     python build.py --only humans   # build a single page
 """
 
@@ -41,7 +40,7 @@ REQUIRED_KEYS = [
     "slug", "name", "accent", "tagline", "audience", "problem",
     "how_it_works", "benefits", "audiences", "demo", "faq",
 ]
-SLUG_RE = re.compile(r"^[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?$")  # lowercase URL-safe slug
+SLUG_RE = re.compile(r"^[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?$")  # valid DNS label
 HEX_RE = re.compile(r"^#[0-9a-fA-F]{6}$")
 
 
@@ -89,7 +88,7 @@ def validate(businesses: list[dict]) -> None:
             continue
 
         if not SLUG_RE.match(str(b["slug"])):
-            errors.append(f"{where}: slug '{b['slug']}' is not a valid URL path segment")
+            errors.append(f"{where}: slug '{b['slug']}' is not a valid subdomain name")
         if slugs.count(b["slug"]) > 1:
             errors.append(f"{where}: slug '{b['slug']}' is used more than once")
         for key in ("accent", "accent_dark"):
@@ -180,13 +179,12 @@ def build(args: argparse.Namespace) -> None:
     businesses = load_businesses(args.businesses)
     validate(businesses)
 
-    base_url = site["base_url"].rstrip("/") + "/"
-    suffix = "index.html" if args.local else ""
+    domain = site["domain"]
 
-    def url_for(slug: str, prefix: str = "../") -> str:
-        return f"{prefix}{slug}/{suffix}"
+    def url_for(slug: str) -> str:
+        return f"../{slug}/index.html" if args.local else f"https://{slug}.{domain}/"
 
-    index_url_from_page = f"../{suffix}"
+    index_url_from_page = "../index.html" if args.local else f"https://{domain}/"
 
     env = Environment(
         loader=FileSystemLoader(args.templates),
@@ -218,7 +216,7 @@ def build(args: argparse.Namespace) -> None:
         b.setdefault("status", site.get("status_default", "Concept"))
         b.setdefault("accent_dark", None)
         b["demo"].setdefault("intro", "")
-        page_url = f"{base_url}{b['slug']}/"
+        page_url = f"https://{b['slug']}.{domain}/"
         ctx = {
             "site": site,
             "b": b,
@@ -242,10 +240,7 @@ def build(args: argparse.Namespace) -> None:
         (folder / "tools.json").write_text(pretty(tools_json(b)) + "\n", encoding="utf-8")
         print(f"built {b['slug']:<12} -> {folder.relative_to(out.parent) if out.parent in folder.parents else folder}")
 
-    root_siblings = [dict(s, url=url_for(s["slug"], prefix="")) for s in siblings]
-    (out / "index.html").write_text(
-        index_tpl.render(site=site, siblings=root_siblings, base_url=base_url), encoding="utf-8")
-    (out / ".nojekyll").write_text("", encoding="utf-8")
+    (out / "index.html").write_text(index_tpl.render(site=site, siblings=siblings), encoding="utf-8")
     print(f"built index        -> {out / 'index.html'}")
 
 

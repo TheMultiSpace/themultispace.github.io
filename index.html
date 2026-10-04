@@ -1,0 +1,409 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Humans on Demand | Agent Economy Lab</title>
+<meta name="description" content="When your agent needs hands, eyes or a signature, it calls a person.">
+<meta property="og:title" content="Humans on Demand">
+<meta property="og:description" content="When your agent needs hands, eyes or a signature, it calls a person.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://humans.example.com/">
+<link rel="canonical" href="https://humans.example.com/">
+<link rel="alternate" type="text/plain" title="llms.txt" href="llms.txt">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "Service", "audience": {"@type": "Audience", "audienceType": "For anyone whose AI agents get stuck on steps that happen in the physical world."}, "description": "When your agent needs hands, eyes or a signature, it calls a person.", "name": "Humans on Demand", "offers": {"@type": "Offer", "description": "Free for a limited time", "price": "0", "priceCurrency": "EUR"}, "provider": {"@type": "Organization", "name": "Agent Economy Lab"}, "url": "https://humans.example.com/"}</script>
+<style>
+:root {
+  --bg: #f3f5f8;
+  --surface: #ffffff;
+  --ink: #17203a;
+  --muted: #56607a;
+  --line: #d9dee8;
+  --code-bg: #17203a;
+  --code-ink: #e6eaf3;
+  --accent: #0f766e;
+  --accent-ink: #ffffff;
+  --accent-soft: color-mix(in srgb, var(--accent) 12%, var(--surface));
+  --sans: "Instrument Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --measure: 68ch;
+  --wide: 1080px;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #10162a;
+    --surface: #182038;
+    --ink: #e8ecf5;
+    --muted: #a3acc2;
+    --line: #2b3552;
+    --code-bg: #0b1020;
+    --code-ink: #dfe4f0;
+    --accent: #5eead4;
+    --accent-ink: #0b1020;
+  }
+}
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font: 400 1.0625rem/1.6 var(--sans);
+}
+a { color: inherit; text-underline-offset: 3px; }
+a:focus-visible, .btn:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 3px;
+}
+.wrap { max-width: var(--wide); margin: 0 auto; padding: 0 16px; }
+@media (min-width: 720px) { .wrap { padding: 0 32px; } }
+section { padding: 56px 0; border-top: 1px solid var(--line); }
+h1, h2, h3 { line-height: 1.15; margin: 0; letter-spacing: -0.01em; }
+h2 { font-size: 1.75rem; font-weight: 600; margin-bottom: 20px; }
+h3 { font-size: 1.125rem; font-weight: 600; }
+p { margin: 0 0 1em; max-width: var(--measure); }
+
+/* Top bar */
+.topbar { display: flex; justify-content: space-between; align-items: center; gap: 16px; padding: 20px 0; font-size: .95rem; }
+.topbar .family { color: var(--muted); text-decoration: none; }
+.status {
+  display: inline-block; padding: 3px 10px; border-radius: 999px;
+  border: 1px solid var(--accent); color: var(--ink); font-size: .85rem; font-weight: 500;
+}
+
+/* Hero */
+.hero { padding: 40px 0 64px; }
+.hero .name { font-size: 1.05rem; font-weight: 600; color: var(--accent); margin-bottom: 18px; }
+.hero h1 { font-size: clamp(2.2rem, 6vw, 4rem); font-weight: 700; max-width: 18ch; letter-spacing: -0.025em; }
+.hero .audience { color: var(--muted); font-size: 1.2rem; margin: 22px 0 0; }
+.signature {
+  margin-top: 32px; display: inline-block; max-width: 100%;
+  font: 500 .95rem/1.5 var(--mono); padding: 12px 16px;
+  background: var(--surface); border: 1px solid var(--line); border-left: 4px solid var(--accent);
+  border-radius: 4px; overflow-x: auto; white-space: nowrap;
+}
+.signature small { display: block; font: 400 .8rem/1.4 var(--sans); color: var(--muted); margin-bottom: 4px; white-space: normal; }
+.actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 32px; }
+.btn {
+  display: inline-block; padding: 12px 20px; border-radius: 6px; font-weight: 600;
+  text-decoration: none; border: 2px solid var(--accent);
+}
+.btn.primary { background: var(--accent); color: var(--accent-ink); }
+.btn.secondary { color: var(--ink); }
+
+/* Problem */
+.problem p { font-size: 1.3rem; line-height: 1.5; }
+
+/* Steps: a real sequence, so numbered */
+.steps { list-style: none; padding: 0; margin: 0; display: grid; gap: 24px; counter-reset: step; }
+@media (min-width: 760px) { .steps { grid-template-columns: repeat(3, 1fr); } }
+.steps li { counter-increment: step; padding-top: 16px; border-top: 3px solid var(--accent); }
+.steps li::before { content: counter(step); display: block; font-size: 2rem; font-weight: 700; color: var(--accent); line-height: 1; margin-bottom: 10px; }
+.steps p { margin: 8px 0 0; color: var(--muted); }
+
+/* Benefits */
+.benefits { display: grid; gap: 28px 40px; margin: 0; }
+@media (min-width: 760px) { .benefits { grid-template-columns: repeat(2, 1fr); } }
+.benefits dt { font-weight: 600; font-size: 1.125rem; }
+.benefits dd { margin: 6px 0 0; color: var(--muted); max-width: 52ch; }
+
+/* Audiences */
+.audiences { display: grid; gap: 16px; }
+@media (min-width: 760px) { .audiences { grid-template-columns: repeat(3, 1fr); } }
+.audience-card { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 24px; }
+.audience-card h3 { margin-bottom: 10px; }
+.audience-card p { margin: 0; color: var(--muted); }
+.audience-card.agent { border-color: var(--accent); background: var(--accent-soft); }
+.audience-card.agent p { font-family: var(--mono); font-size: .9rem; color: var(--ink); }
+
+/* Demo */
+.demo-intro { color: var(--muted); }
+.mockup-note { font-size: .9rem; color: var(--muted); }
+.demo { display: grid; gap: 24px; margin-top: 24px; }
+@media (min-width: 900px) { .demo { grid-template-columns: 5fr 6fr; align-items: start; } }
+.demo > * { min-width: 0; }
+.tool-card { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 24px; }
+.tool-card .tool-name { font: 500 1.1rem/1.3 var(--mono); color: var(--accent); margin: 0 0 10px; overflow-wrap: anywhere; }
+.tool-card table { width: 100%; border-collapse: collapse; font-size: .92rem; margin-top: 16px; }
+.tool-card th { text-align: left; font-weight: 600; padding: 6px 8px 6px 0; border-bottom: 1px solid var(--line); }
+.tool-card td { padding: 8px 8px 8px 0; border-bottom: 1px solid var(--line); vertical-align: top; }
+.tool-card td code { font-family: var(--mono); font-size: .85rem; }
+.tool-card td:nth-child(-n+2) { white-space: nowrap; }
+.table-scroll { overflow-x: auto; margin-top: 16px; }
+.table-scroll table { margin-top: 0; }
+.tool-card .req { color: var(--accent); font-weight: 600; }
+.tool-card .returns { margin-top: 16px; font-size: .95rem; }
+.code-block h3 { font-size: .95rem; margin: 0 0 8px; color: var(--muted); font-weight: 500; }
+.code-block + .code-block { margin-top: 20px; }
+pre {
+  margin: 0; background: var(--code-bg); color: var(--code-ink); border-radius: 8px;
+  padding: 18px; overflow-x: auto; font: 400 .85rem/1.55 var(--mono);
+}
+
+/* Pricing */
+.price { font-size: clamp(1.8rem, 4vw, 2.6rem); font-weight: 700; color: var(--accent); margin-bottom: 12px; }
+
+/* FAQ */
+.faq details { border-bottom: 1px solid var(--line); padding: 16px 0; max-width: 80ch; }
+.faq summary { cursor: pointer; font-weight: 600; font-size: 1.05rem; }
+.faq details p { margin: 10px 0 0; color: var(--muted); }
+
+/* Newsletter */
+.updates { background: var(--accent-soft); }
+.updates .links { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 20px; }
+
+/* Footer */
+footer { padding: 40px 0 56px; border-top: 1px solid var(--line); font-size: .95rem; color: var(--muted); }
+footer .cols { display: grid; gap: 28px; }
+@media (min-width: 760px) { footer .cols { grid-template-columns: 1fr 2fr; } }
+footer h2 { font-size: 1rem; color: var(--ink); margin-bottom: 10px; }
+footer ul { list-style: none; padding: 0; margin: 0; columns: 2 180px; column-gap: 24px; }
+footer li { margin-bottom: 6px; break-inside: avoid; }
+footer li[aria-current] { color: var(--ink); font-weight: 600; }
+footer .related { margin-top: 12px; }
+
+@media (prefers-reduced-motion: no-preference) {
+  html { scroll-behavior: smooth; }
+}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header class="topbar">
+    <a class="family" href="https://example.com/">Agent Economy Lab</a>
+    <span class="status">Concept</span>
+  </header>
+
+  <!-- 1. Hero -->
+  <div class="hero">
+    <p class="name">Humans on Demand</p>
+    <h1>When your agent needs hands, eyes or a signature, it calls a person.</h1>
+    <p class="audience">For anyone whose AI agents get stuck on steps that happen in the physical world.</p>
+    <div class="signature" aria-label="Tool signature for AI agents">
+      <small>What an agent sees</small>in_person_task(location, checklist, deadline, notes?)
+    </div>
+    <div class="actions">
+      <a class="btn primary" href="#demo">See the demo</a>
+      <a class="btn secondary" href="#updates">Get updates</a>
+    </div>
+  </div>
+</div>
+
+<main>
+  <!-- 2. The problem -->
+  <section class="problem" aria-labelledby="problem-h">
+    <div class="wrap">
+      <h2 id="problem-h">The problem</h2>
+<p>Agents can research, compare and book, but they cannot look at a flat, collect a key or check that a delivery arrived in one piece.</p><p>Today that step lands back on you, usually at the worst moment, and the whole task waits until you have time.</p>    </div>
+  </section>
+
+  <!-- 3. How it works -->
+  <section aria-labelledby="how-h">
+    <div class="wrap">
+      <h2 id="how-h">How it works</h2>
+      <ol class="steps">
+        <li><h3>Your agent posts a task</h3><p>It sends a location, a checklist and a deadline, written the way it already describes work.</p></li>
+        <li><h3>A person nearby takes it</h3><p>Someone in the area accepts the task and follows the checklist step by step.</p></li>
+        <li><h3>Your agent gets the results</h3><p>Photos, notes and location stamps come back as structured data the agent can use straight away.</p></li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- 4. What you get -->
+  <section aria-labelledby="get-h">
+    <div class="wrap">
+      <h2 id="get-h">What you get</h2>
+      <dl class="benefits">
+        <div><dt>Real-world reach</dt><dd>Viewings, pickups, drop-offs, inspections and in-person checks become something your agent can do.</dd></div>
+        <div><dt>Answers your agent can read</dt><dd>Every result follows the checklist it sent, so there is nothing to interpret.</dd></div>
+        <div><dt>You stay out of the loop</dt><dd>Tasks that used to need you now finish while you get on with your day.</dd></div>
+        <div><dt>Clear instructions for the people doing the work</dt><dd>Tasks arrive with exact steps, so there is no guessing about what is wanted.</dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <!-- 5. Who it's for -->
+  <section aria-labelledby="who-h">
+    <div class="wrap">
+      <h2 id="who-h">Who it's for</h2>
+      <div class="audiences">
+        <div class="audience-card">
+          <h3>For people and teams using agents</h3>
+          <p>Let your agent finish the jobs it used to hand back to you, such as checking a car before you buy it or picking up a parcel.</p>
+        </div>
+        <div class="audience-card agent">
+          <h3>For agents</h3>
+          <p>in_person_task(location, checklist, deadline) returns photos, notes and a location-stamped record for each checklist item.</p>
+        </div>
+        <div class="audience-card">
+          <h3>For people who want paid tasks</h3>
+          <p>Short tasks near you with exact instructions, and no customer conversation to manage.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6. Demo (MCP mockup) -->
+  <section id="demo" aria-labelledby="demo-h">
+    <div class="wrap">
+      <h2 id="demo-h">Demo</h2>
+<p class="demo-intro">An agent asks someone to check a used car before its owner travels to see it.</p>      <p class="mockup-note">This is a static mockup of the MCP tool. The full definition is in <a href="tools.json">tools.json</a>.</p>
+      <div class="demo">
+        <div class="tool-card">
+          <p class="tool-name">in_person_task</p>
+          <p>Send a person to a location to complete a checklist and report back with photos and notes.</p>
+          <div class="table-scroll"><table>
+            <thead><tr><th scope="col">Input</th><th scope="col">Type</th><th scope="col">Description</th></tr></thead>
+            <tbody>
+              <tr>
+                <td><code>location</code> <span class="req" title="Required">*</span></td>
+                <td><code>string</code></td>
+                <td>Address or coordinates where the task happens.</td>
+              </tr>
+              <tr>
+                <td><code>checklist</code> <span class="req" title="Required">*</span></td>
+                <td><code>array</code></td>
+                <td>Steps to complete, each with what to photograph or record.</td>
+              </tr>
+              <tr>
+                <td><code>deadline</code> <span class="req" title="Required">*</span></td>
+                <td><code>string</code></td>
+                <td>Latest completion time, in ISO 8601.</td>
+              </tr>
+              <tr>
+                <td><code>notes</code></td>
+                <td><code>string</code></td>
+                <td>Access details or anything the person should know.</td>
+              </tr>
+            </tbody>
+          </table></div>
+          <p class="returns"><strong>Returns:</strong> A task ID, status, and one result per checklist item with photos, notes and a timestamp.</p>
+        </div>
+        <div>
+          <div class="code-block">
+            <h3>Example call</h3>
+            <pre><code>{
+  &#34;name&#34;: &#34;in_person_task&#34;,
+  &#34;arguments&#34;: {
+    &#34;location&#34;: &#34;22 Main Street, Galway&#34;,
+    &#34;checklist&#34;: [
+      &#34;Photograph all four tyres&#34;,
+      &#34;Photograph the odometer&#34;,
+      &#34;Start the engine and record any warning lights&#34;
+    ],
+    &#34;deadline&#34;: &#34;2026-10-06T17:00:00+01:00&#34;,
+    &#34;notes&#34;: &#34;Seller is Aoife, available after 14:00&#34;
+  }
+}</code></pre>
+          </div>
+          <div class="code-block">
+            <h3>Example result</h3>
+            <pre><code>{
+  &#34;task_id&#34;: &#34;tsk_8f21&#34;,
+  &#34;status&#34;: &#34;completed&#34;,
+  &#34;completed_at&#34;: &#34;2026-10-06T15:12:00+01:00&#34;,
+  &#34;results&#34;: [
+    {
+      &#34;item&#34;: &#34;Photograph all four tyres&#34;,
+      &#34;photos&#34;: [
+        &#34;tsk_8f21/1.jpg&#34;,
+        &#34;tsk_8f21/2.jpg&#34;,
+        &#34;tsk_8f21/3.jpg&#34;,
+        &#34;tsk_8f21/4.jpg&#34;
+      ],
+      &#34;note&#34;: &#34;Rear left tread noticeably lower than the others&#34;
+    },
+    {
+      &#34;item&#34;: &#34;Photograph the odometer&#34;,
+      &#34;photos&#34;: [
+        &#34;tsk_8f21/5.jpg&#34;
+      ],
+      &#34;note&#34;: &#34;142,310 km&#34;
+    },
+    {
+      &#34;item&#34;: &#34;Start the engine and record any warning lights&#34;,
+      &#34;photos&#34;: [
+        &#34;tsk_8f21/6.jpg&#34;
+      ],
+      &#34;note&#34;: &#34;No warning lights after start-up&#34;
+    }
+  ]
+}</code></pre>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 7. Pricing -->
+  <section aria-labelledby="price-h">
+    <div class="wrap">
+      <h2 id="price-h">Pricing</h2>
+      <p class="price">Free for a limited time</p>
+      <p>Everything on this page is free to use while we are in this early phase. Paid plans, if any, will be announced to newsletter subscribers first.</p>
+    </div>
+  </section>
+
+  <!-- 8. FAQ -->
+  <section class="faq" aria-labelledby="faq-h">
+    <div class="wrap">
+      <h2 id="faq-h">Questions</h2>
+      <details><summary>What kinds of tasks fit?</summary><p>Anything a person can do in under an hour with clear instructions, such as viewing, photographing, collecting, dropping off or checking something.</p></details>
+      <details><summary>Can I use it without an agent?</summary><p>Yes. The same tasks can be posted from a simple form, but the service is designed for agents first.</p></details>
+      <details><summary>Where will it be available?</summary><p>We plan to start in a few cities and expand based on demand from people who follow our updates.</p></details>
+      <details><summary>What does &#34;Concept&#34; mean?</summary><p>The service is being designed in the open. The demo shows how it will work, but it is a static mockup and is not connected to a live server yet.</p></details>
+      <details><summary>How do I get access when it launches?</summary><p>Follow us on one of the channels in the &#34;Stay updated&#34; section.</p></details>
+    </div>
+  </section>
+
+  <!-- 9. Stay updated -->
+  <section id="updates" class="updates" aria-labelledby="updates-h">
+    <div class="wrap">
+      <h2 id="updates-h">Stay updated</h2>
+      <p>We publish progress notes, new demos and early-access invitations. Follow along wherever you read.</p>
+      <div class="links">
+        <a class="btn primary" href="https://example.substack.com" rel="noopener">Follow on Substack</a>
+        <a class="btn secondary" href="https://bsky.app/profile/example.com" rel="noopener">Follow on Bluesky</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- 10. Footer -->
+<footer>
+  <div class="wrap cols">
+    <div>
+      <h2>Agent Economy Lab</h2>
+      <p>Services the agent economy is missing, one subdomain each.</p>
+      <p>Status: Concept. Contact: <a href="mailto:hello@example.com">hello@example.com</a></p>
+    </div>
+    <div>
+      <h2>All services</h2>
+      <ul>
+        <li aria-current="page">Humans on Demand</li>
+        <li><a href="https://mandates.example.com/">Agent Mandates</a></li>
+        <li><a href="https://frontdesk.example.com/">Agent Front Desk</a></li>
+        <li><a href="https://attention.example.com/">Attention Gate</a></li>
+        <li><a href="https://facts.example.com/">Verified Facts</a></li>
+        <li><a href="https://bids.example.com/">Open Bids</a></li>
+        <li><a href="https://disputes.example.com/">Fast Disputes</a></li>
+        <li><a href="https://recorder.example.com/">Flight Recorder</a></li>
+        <li><a href="https://proofs.example.com/">Prove It</a></li>
+        <li><a href="https://router.example.com/">Smart Router</a></li>
+        <li><a href="https://approvals.example.com/">Approval Queue</a></li>
+        <li><a href="https://spend.example.com/">Agent Spend</a></li>
+        <li><a href="https://mirror.example.com/">AI Mirror</a></li>
+        <li><a href="https://simulator.example.com/">Agent Simulator</a></li>
+        <li><a href="https://identity.example.com/">Agent Identity</a></li>
+      </ul>
+      <p class="related">Works well with <a href="https://facts.example.com/">Verified Facts</a> and <a href="https://approvals.example.com/">Approval Queue</a>.</p>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
