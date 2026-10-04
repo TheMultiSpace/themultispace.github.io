@@ -1,0 +1,85 @@
+slug: mirror
+order: 13
+name: AI Mirror
+accent: "#9d174d"
+accent_dark: "#f9a8d4"
+tagline: Find out what AI assistants tell people about your business.
+audience: For business owners who want to know how they look to AI assistants.
+
+problem: |
+  More people now ask an AI assistant which plumber to call, which café to visit or which accountant to hire.
+
+  You cannot see those conversations. The assistant may have your hours wrong, quote an old price or recommend the shop down the road.
+
+how_it_works:
+  - title: Enter your business
+    text: Your name, area and what you do. That is all it takes.
+  - title: We ask the assistants
+    text: The questions your customers would ask are put to the major AI assistants.
+  - title: Read your report
+    text: See what each assistant says, what it gets wrong and how to correct it.
+
+benefits:
+  - title: See what customers see
+    text: The actual answers assistants give about you and your competitors.
+  - title: Spot the mistakes
+    text: Wrong hours, old prices and missing services, listed in one place.
+  - title: Know how to fix them
+    text: Each problem comes with the steps that help correct it.
+  - title: Track changes over time
+    text: Run the check again each month and see what improved.
+
+audiences:
+  - label: For business owners
+    pitch: See in two minutes what AI assistants tell people about your business, and what they get wrong.
+  - label: For marketing agencies
+    pitch: Run the check for each client and show them a clear before-and-after.
+  - label: For agents
+    agent: true
+    pitch: assistant_snapshot(business, area, questions) returns what each assistant answers and which facts conflict with the business's own data.
+
+demo:
+  intro: A café owner checks what assistants say about them.
+  tool:
+    name: assistant_snapshot
+    description: Ask several AI assistants about a business and compare their answers with the business's own details.
+    inputs:
+      - name: business
+        type: string
+        required: true
+        description: The business name.
+      - name: area
+        type: string
+        required: true
+        description: Town or district.
+      - name: questions
+        type: array
+        required: false
+        description: Customer-style questions to ask. Defaults to a standard set.
+    returns: Each assistant's answer, whether the business was recommended, and a list of facts that are wrong or missing.
+  example_request:
+    business: "The Little Bean"
+    area: "Kilkenny"
+    questions: ["Good café for brunch in Kilkenny?", "Is The Little Bean open on Sundays?"]
+  example_response:
+    assistants_checked: 4
+    recommended_by: 1
+    issues:
+      - fact: "Sunday opening"
+        said: "Closed on Sundays"
+        actual: "Open 9:00–15:00 on Sundays"
+        assistants: 3
+      - fact: "Brunch menu"
+        said: "Not mentioned"
+        actual: "Served daily until 14:00"
+        assistants: 4
+
+faq:
+  - q: Which assistants do you check?
+    a: The most widely used general-purpose AI assistants. The report names each one.
+  - q: Can you change what an assistant says?
+    a: Not directly. The report shows which sources the assistants rely on and how to correct them.
+  - q: Do I need to connect anything?
+    a: No. The check works from your business name and area.
+
+related: [frontdesk, facts]

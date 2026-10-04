@@ -1,0 +1,79 @@
+slug: spend
+order: 12
+name: Agent Spend
+accent: "#a16207"
+accent_dark: "#fde047"
+tagline: See every euro your agents spend, and cap it per agent and per task.
+audience: For people and teams paying for agents, tools and the things agents buy.
+
+problem: |
+  Agents spend money in many small ways: API calls, subscriptions, tool fees and purchases on your behalf. Each charge shows up somewhere different, if it shows up at all.
+
+  By the time the monthly bill arrives, nobody can say which agent spent what, or why.
+
+how_it_works:
+  - title: Connect your accounts
+    text: Link the cards, API accounts and tools your agents use.
+  - title: See spending by agent and task
+    text: Every charge is matched to the agent and the task that caused it.
+  - title: Set caps
+    text: Limit spending per agent, per task or per day. Anything over the cap waits for you.
+
+benefits:
+  - title: One view of all agent spending
+    text: Purchases, API usage and subscriptions together, in one dashboard.
+  - title: Know what each task cost
+    text: See the full cost of a task, from the model calls to the final purchase.
+  - title: Caps that stop surprises
+    text: Spending pauses at the limit you set, instead of appearing on next month's bill.
+  - title: Reports for your accountant
+    text: Export spending by agent, project or category.
+
+audiences:
+  - label: For people
+    pitch: Know what your agents are costing you, and stop any of them from spending more than you planned.
+  - label: For teams and finance
+    pitch: Treat agents like a cost centre. See what each one spends, set budgets and export reports.
+  - label: For agents
+    agent: true
+    pitch: check_budget(agent_id, amount) returns whether a charge fits the remaining budget before the agent commits to it.
+
+demo:
+  intro: An agent checks its budget before paying for a premium data report.
+  tool:
+    name: check_budget
+    description: Check whether a planned charge fits within an agent's remaining budget.
+    inputs:
+      - name: agent_id
+        type: string
+        required: true
+        description: The agent planning to spend.
+      - name: amount
+        type: object
+        required: true
+        description: Value and currency of the planned charge.
+      - name: task_id
+        type: string
+        required: false
+        description: The task the charge belongs to.
+    returns: Whether the charge fits, the remaining budget for the agent and the task, and the budget period.
+  example_request:
+    agent_id: "agt_research"
+    amount: { value: 39.00, currency: EUR }
+    task_id: "task_market_scan"
+  example_response:
+    fits: false
+    remaining_agent_budget: { value: 22.50, currency: EUR }
+    remaining_task_budget: { value: 60.00, currency: EUR }
+    period: "October 2026"
+    next_step: "Ask the owner to raise the agent's monthly cap"
+
+faq:
+  - q: Does it move money?
+    a: No. It reads your accounts and enforces caps through the tools you already use.
+  - q: What counts as agent spending?
+    a: Model and API usage, tool subscriptions, and purchases an agent makes for you.
+  - q: Can I set different caps for different agents?
+    a: Yes. Caps can be set per agent, per task, per day or per month.
+
+related: [mandates, approvals]

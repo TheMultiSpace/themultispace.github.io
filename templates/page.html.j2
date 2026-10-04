@@ -1,0 +1,338 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{ b.name }} | {{ site.family_name }}</title>
+<meta name="description" content="{{ b.tagline }}">
+<meta property="og:title" content="{{ b.name }}">
+<meta property="og:description" content="{{ b.tagline }}">
+<meta property="og:type" content="website">
+<meta property="og:url" content="{{ page_url }}">
+<link rel="canonical" href="{{ page_url }}">
+<link rel="alternate" type="text/plain" title="llms.txt" href="llms.txt">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script type="application/ld+json">{{ json_ld | tojson }}</script>
+<style>
+:root {
+  --bg: #f3f5f8;
+  --surface: #ffffff;
+  --ink: #17203a;
+  --muted: #56607a;
+  --line: #d9dee8;
+  --code-bg: #17203a;
+  --code-ink: #e6eaf3;
+  --accent: {{ b.accent }};
+  --accent-ink: #ffffff;
+  --accent-soft: color-mix(in srgb, var(--accent) 12%, var(--surface));
+  --sans: "Instrument Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --measure: 68ch;
+  --wide: 1080px;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #10162a;
+    --surface: #182038;
+    --ink: #e8ecf5;
+    --muted: #a3acc2;
+    --line: #2b3552;
+    --code-bg: #0b1020;
+    --code-ink: #dfe4f0;
+    --accent: {{ b.accent_dark or b.accent }};
+    --accent-ink: #0b1020;
+  }
+}
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font: 400 1.0625rem/1.6 var(--sans);
+}
+a { color: inherit; text-underline-offset: 3px; }
+a:focus-visible, .btn:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 3px;
+}
+.wrap { max-width: var(--wide); margin: 0 auto; padding: 0 16px; }
+@media (min-width: 720px) { .wrap { padding: 0 32px; } }
+section { padding: 56px 0; border-top: 1px solid var(--line); }
+h1, h2, h3 { line-height: 1.15; margin: 0; letter-spacing: -0.01em; }
+h2 { font-size: 1.75rem; font-weight: 600; margin-bottom: 20px; }
+h3 { font-size: 1.125rem; font-weight: 600; }
+p { margin: 0 0 1em; max-width: var(--measure); }
+
+/* Top bar */
+.topbar { display: flex; justify-content: space-between; align-items: center; gap: 16px; padding: 20px 0; font-size: .95rem; }
+.topbar .family { color: var(--muted); text-decoration: none; }
+.status {
+  display: inline-block; padding: 3px 10px; border-radius: 999px;
+  border: 1px solid var(--accent); color: var(--ink); font-size: .85rem; font-weight: 500;
+}
+
+/* Hero */
+.hero { padding: 40px 0 64px; }
+.hero .name { font-size: 1.05rem; font-weight: 600; color: var(--accent); margin-bottom: 18px; }
+.hero h1 { font-size: clamp(2.2rem, 6vw, 4rem); font-weight: 700; max-width: 18ch; letter-spacing: -0.025em; }
+.hero .audience { color: var(--muted); font-size: 1.2rem; margin: 22px 0 0; }
+.signature {
+  margin-top: 32px; display: inline-block; max-width: 100%;
+  font: 500 .95rem/1.5 var(--mono); padding: 12px 16px;
+  background: var(--surface); border: 1px solid var(--line); border-left: 4px solid var(--accent);
+  border-radius: 4px; overflow-x: auto; white-space: nowrap;
+}
+.signature small { display: block; font: 400 .8rem/1.4 var(--sans); color: var(--muted); margin-bottom: 4px; white-space: normal; }
+.actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 32px; }
+.btn {
+  display: inline-block; padding: 12px 20px; border-radius: 6px; font-weight: 600;
+  text-decoration: none; border: 2px solid var(--accent);
+}
+.btn.primary { background: var(--accent); color: var(--accent-ink); }
+.btn.secondary { color: var(--ink); }
+
+/* Problem */
+.problem p { font-size: 1.3rem; line-height: 1.5; }
+
+/* Steps: a real sequence, so numbered */
+.steps { list-style: none; padding: 0; margin: 0; display: grid; gap: 24px; counter-reset: step; }
+@media (min-width: 760px) { .steps { grid-template-columns: repeat(3, 1fr); } }
+.steps li { counter-increment: step; padding-top: 16px; border-top: 3px solid var(--accent); }
+.steps li::before { content: counter(step); display: block; font-size: 2rem; font-weight: 700; color: var(--accent); line-height: 1; margin-bottom: 10px; }
+.steps p { margin: 8px 0 0; color: var(--muted); }
+
+/* Benefits */
+.benefits { display: grid; gap: 28px 40px; margin: 0; }
+@media (min-width: 760px) { .benefits { grid-template-columns: repeat(2, 1fr); } }
+.benefits dt { font-weight: 600; font-size: 1.125rem; }
+.benefits dd { margin: 6px 0 0; color: var(--muted); max-width: 52ch; }
+
+/* Audiences */
+.audiences { display: grid; gap: 16px; }
+@media (min-width: 760px) { .audiences { grid-template-columns: repeat({{ [b.audiences|length, 3]|min }}, 1fr); } }
+.audience-card { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 24px; }
+.audience-card h3 { margin-bottom: 10px; }
+.audience-card p { margin: 0; color: var(--muted); }
+.audience-card.agent { border-color: var(--accent); background: var(--accent-soft); }
+.audience-card.agent p { font-family: var(--mono); font-size: .9rem; color: var(--ink); }
+
+/* Demo */
+.demo-intro { color: var(--muted); }
+.mockup-note { font-size: .9rem; color: var(--muted); }
+.demo { display: grid; gap: 24px; margin-top: 24px; }
+@media (min-width: 900px) { .demo { grid-template-columns: 5fr 6fr; align-items: start; } }
+.demo > * { min-width: 0; }
+.tool-card { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 24px; }
+.tool-card .tool-name { font: 500 1.1rem/1.3 var(--mono); color: var(--accent); margin: 0 0 10px; overflow-wrap: anywhere; }
+.tool-card table { width: 100%; border-collapse: collapse; font-size: .92rem; margin-top: 16px; }
+.tool-card th { text-align: left; font-weight: 600; padding: 6px 8px 6px 0; border-bottom: 1px solid var(--line); }
+.tool-card td { padding: 8px 8px 8px 0; border-bottom: 1px solid var(--line); vertical-align: top; }
+.tool-card td code { font-family: var(--mono); font-size: .85rem; }
+.tool-card td:nth-child(-n+2) { white-space: nowrap; }
+.table-scroll { overflow-x: auto; margin-top: 16px; }
+.table-scroll table { margin-top: 0; }
+.tool-card .req { color: var(--accent); font-weight: 600; }
+.tool-card .returns { margin-top: 16px; font-size: .95rem; }
+.code-block h3 { font-size: .95rem; margin: 0 0 8px; color: var(--muted); font-weight: 500; }
+.code-block + .code-block { margin-top: 20px; }
+pre {
+  margin: 0; background: var(--code-bg); color: var(--code-ink); border-radius: 8px;
+  padding: 18px; overflow-x: auto; font: 400 .85rem/1.55 var(--mono);
+}
+
+/* Pricing */
+.price { font-size: clamp(1.8rem, 4vw, 2.6rem); font-weight: 700; color: var(--accent); margin-bottom: 12px; }
+
+/* FAQ */
+.faq details { border-bottom: 1px solid var(--line); padding: 16px 0; max-width: 80ch; }
+.faq summary { cursor: pointer; font-weight: 600; font-size: 1.05rem; }
+.faq details p { margin: 10px 0 0; color: var(--muted); }
+
+/* Newsletter */
+.updates { background: var(--accent-soft); }
+.updates .links { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 20px; }
+
+/* Footer */
+footer { padding: 40px 0 56px; border-top: 1px solid var(--line); font-size: .95rem; color: var(--muted); }
+footer .cols { display: grid; gap: 28px; }
+@media (min-width: 760px) { footer .cols { grid-template-columns: 1fr 2fr; } }
+footer h2 { font-size: 1rem; color: var(--ink); margin-bottom: 10px; }
+footer ul { list-style: none; padding: 0; margin: 0; columns: 2 180px; column-gap: 24px; }
+footer li { margin-bottom: 6px; break-inside: avoid; }
+footer li[aria-current] { color: var(--ink); font-weight: 600; }
+footer .related { margin-top: 12px; }
+
+@media (prefers-reduced-motion: no-preference) {
+  html { scroll-behavior: smooth; }
+}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header class="topbar">
+    <a class="family" href="{{ index_url }}">{{ site.family_name }}</a>
+    <span class="status">{{ b.status }}</span>
+  </header>
+
+  <!-- 1. Hero -->
+  <div class="hero">
+    <p class="name">{{ b.name }}</p>
+    <h1>{{ b.tagline }}</h1>
+    <p class="audience">{{ b.audience }}</p>
+    <div class="signature" aria-label="Tool signature for AI agents">
+      <small>What an agent sees</small>{{ signature }}
+    </div>
+    <div class="actions">
+      <a class="btn primary" href="#demo">See the demo</a>
+      <a class="btn secondary" href="#updates">Get updates</a>
+    </div>
+  </div>
+</div>
+
+<main>
+  <!-- 2. The problem -->
+  <section class="problem" aria-labelledby="problem-h">
+    <div class="wrap">
+      <h2 id="problem-h">The problem</h2>
+      {% for para in b.problem | paragraphs %}<p>{{ para }}</p>{% endfor %}
+    </div>
+  </section>
+
+  <!-- 3. How it works -->
+  <section aria-labelledby="how-h">
+    <div class="wrap">
+      <h2 id="how-h">How it works</h2>
+      <ol class="steps">
+        {% for step in b.how_it_works %}
+        <li><h3>{{ step.title }}</h3><p>{{ step.text }}</p></li>
+        {% endfor %}
+      </ol>
+    </div>
+  </section>
+
+  <!-- 4. What you get -->
+  <section aria-labelledby="get-h">
+    <div class="wrap">
+      <h2 id="get-h">What you get</h2>
+      <dl class="benefits">
+        {% for item in b.benefits %}
+        <div><dt>{{ item.title }}</dt><dd>{{ item.text }}</dd></div>
+        {% endfor %}
+      </dl>
+    </div>
+  </section>
+
+  <!-- 5. Who it's for -->
+  <section aria-labelledby="who-h">
+    <div class="wrap">
+      <h2 id="who-h">Who it's for</h2>
+      <div class="audiences">
+        {% for a in b.audiences %}
+        <div class="audience-card{% if a.get('agent') %} agent{% endif %}">
+          <h3>{{ a.label }}</h3>
+          <p>{{ a.pitch }}</p>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+
+  <!-- 6. Demo (MCP mockup) -->
+  <section id="demo" aria-labelledby="demo-h">
+    <div class="wrap">
+      <h2 id="demo-h">Demo</h2>
+      {% if b.demo.intro %}<p class="demo-intro">{{ b.demo.intro }}</p>{% endif %}
+      <p class="mockup-note">This is a static mockup of the MCP tool. The full definition is in <a href="tools.json">tools.json</a>.</p>
+      <div class="demo">
+        <div class="tool-card">
+          <p class="tool-name">{{ b.demo.tool.name }}</p>
+          <p>{{ b.demo.tool.description }}</p>
+          <div class="table-scroll"><table>
+            <thead><tr><th scope="col">Input</th><th scope="col">Type</th><th scope="col">Description</th></tr></thead>
+            <tbody>
+              {% for i in b.demo.tool.inputs %}
+              <tr>
+                <td><code>{{ i.name }}</code>{% if i.get('required') %} <span class="req" title="Required">*</span>{% endif %}</td>
+                <td><code>{{ i.type }}</code></td>
+                <td>{{ i.description }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table></div>
+          <p class="returns"><strong>Returns:</strong> {{ b.demo.tool.returns }}</p>
+        </div>
+        <div>
+          <div class="code-block">
+            <h3>Example call</h3>
+            <pre><code>{{ example_request }}</code></pre>
+          </div>
+          <div class="code-block">
+            <h3>Example result</h3>
+            <pre><code>{{ example_response }}</code></pre>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 7. Pricing -->
+  <section aria-labelledby="price-h">
+    <div class="wrap">
+      <h2 id="price-h">Pricing</h2>
+      <p class="price">{{ pricing.headline }}</p>
+      <p>{{ pricing.text }}</p>
+    </div>
+  </section>
+
+  <!-- 8. FAQ -->
+  <section class="faq" aria-labelledby="faq-h">
+    <div class="wrap">
+      <h2 id="faq-h">Questions</h2>
+      {% for item in faq %}
+      <details><summary>{{ item.q }}</summary><p>{{ item.a }}</p></details>
+      {% endfor %}
+    </div>
+  </section>
+
+  <!-- 9. Stay updated -->
+  <section id="updates" class="updates" aria-labelledby="updates-h">
+    <div class="wrap">
+      <h2 id="updates-h">{{ newsletter.headline }}</h2>
+      <p>{{ newsletter.text }}</p>
+      <div class="links">
+        {% for l in newsletter.links %}
+        <a class="btn {{ 'primary' if loop.first else 'secondary' }}" href="{{ l.url }}" rel="noopener">Follow on {{ l.label }}</a>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- 10. Footer -->
+<footer>
+  <div class="wrap cols">
+    <div>
+      <h2>{{ site.family_name }}</h2>
+      <p>{{ site.family_tagline }}</p>
+      <p>Status: {{ b.status }}. Contact: <a href="mailto:{{ site.contact_email }}">{{ site.contact_email }}</a></p>
+    </div>
+    <div>
+      <h2>All services</h2>
+      <ul>
+        {% for s in siblings %}
+        <li{% if s.slug == b.slug %} aria-current="page"{% endif %}>{% if s.slug == b.slug %}{{ s.name }}{% else %}<a href="{{ s.url }}">{{ s.name }}</a>{% endif %}</li>
+        {% endfor %}
+      </ul>
+      {% if related %}
+      <p class="related">Works well with {% for r in related %}<a href="{{ r.url }}">{{ r.name }}</a>{{ ", " if not loop.last and loop.revindex > 2 else (" and " if not loop.last else ".") }}{% endfor %}</p>
+      {% endif %}
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

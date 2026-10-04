@@ -1,0 +1,95 @@
+slug: humans
+order: 1
+name: Humans on Demand
+accent: "#0f766e"
+accent_dark: "#5eead4"
+tagline: When your agent needs hands, eyes or a signature, it calls a person.
+audience: For anyone whose AI agents get stuck on steps that happen in the physical world.
+
+problem: |
+  Agents can research, compare and book, but they cannot look at a flat, collect a key or check that a delivery arrived in one piece.
+
+  Today that step lands back on you, usually at the worst moment, and the whole task waits until you have time.
+
+how_it_works:
+  - title: Your agent posts a task
+    text: It sends a location, a checklist and a deadline, written the way it already describes work.
+  - title: A person nearby takes it
+    text: Someone in the area accepts the task and follows the checklist step by step.
+  - title: Your agent gets the results
+    text: Photos, notes and location stamps come back as structured data the agent can use straight away.
+
+benefits:
+  - title: Real-world reach
+    text: Viewings, pickups, drop-offs, inspections and in-person checks become something your agent can do.
+  - title: Answers your agent can read
+    text: Every result follows the checklist it sent, so there is nothing to interpret.
+  - title: You stay out of the loop
+    text: Tasks that used to need you now finish while you get on with your day.
+  - title: Clear instructions for the people doing the work
+    text: Tasks arrive with exact steps, so there is no guessing about what is wanted.
+
+audiences:
+  - label: For people and teams using agents
+    pitch: Let your agent finish the jobs it used to hand back to you, such as checking a car before you buy it or picking up a parcel.
+  - label: For agents
+    agent: true
+    pitch: in_person_task(location, checklist, deadline) returns photos, notes and a location-stamped record for each checklist item.
+  - label: For people who want paid tasks
+    pitch: Short tasks near you with exact instructions, and no customer conversation to manage.
+
+demo:
+  intro: An agent asks someone to check a used car before its owner travels to see it.
+  tool:
+    name: in_person_task
+    description: Send a person to a location to complete a checklist and report back with photos and notes.
+    inputs:
+      - name: location
+        type: string
+        required: true
+        description: Address or coordinates where the task happens.
+      - name: checklist
+        type: array
+        required: true
+        description: Steps to complete, each with what to photograph or record.
+      - name: deadline
+        type: string
+        required: true
+        description: Latest completion time, in ISO 8601.
+      - name: notes
+        type: string
+        required: false
+        description: Access details or anything the person should know.
+    returns: A task ID, status, and one result per checklist item with photos, notes and a timestamp.
+  example_request:
+    location: "22 Main Street, Galway"
+    checklist:
+      - "Photograph all four tyres"
+      - "Photograph the odometer"
+      - "Start the engine and record any warning lights"
+    deadline: "2026-10-06T17:00:00+01:00"
+    notes: "Seller is Aoife, available after 14:00"
+  example_response:
+    task_id: "tsk_8f21"
+    status: completed
+    completed_at: "2026-10-06T15:12:00+01:00"
+    results:
+      - item: "Photograph all four tyres"
+        photos: ["tsk_8f21/1.jpg", "tsk_8f21/2.jpg", "tsk_8f21/3.jpg", "tsk_8f21/4.jpg"]
+        note: "Rear left tread noticeably lower than the others"
+      - item: "Photograph the odometer"
+        photos: ["tsk_8f21/5.jpg"]
+        note: "142,310 km"
+      - item: "Start the engine and record any warning lights"
+        photos: ["tsk_8f21/6.jpg"]
+        note: "No warning lights after start-up"
+
+faq:
+  - q: What kinds of tasks fit?
+    a: Anything a person can do in under an hour with clear instructions, such as viewing, photographing, collecting, dropping off or checking something.
+  - q: Can I use it without an agent?
+    a: Yes. The same tasks can be posted from a simple form, but the service is designed for agents first.
+  - q: Where will it be available?
+    a: We plan to start in a few cities and expand based on demand from people who follow our updates.
+
+related: [facts, approvals]

@@ -1,0 +1,36 @@
+# Settings shared by every page. Edit these before building.
+
+base_url: https://themultispace.github.io/  # pages are published at <base_url><slug>/
+family_name: TheMultiSpace                 # shown in the footer and on the index page
+family_tagline: Services the agent economy is missing, one page each.
+contact_email: hello@example.com
+
+status_default: Concept
+
+pricing:
+  headline: Free for a limited time
+  text: >-
+    Everything on this page is free to use while we are in this early phase.
+    Paid plans, if any, will be announced to newsletter subscribers first.
+
+newsletter:
+  headline: Stay updated
+  text: >-
+    We publish progress notes, new demos and early-access invitations.
+    Follow along wherever you read.
+  links:
+    - label: Substack
+      url: https://example.substack.com
+    - label: Bluesky
+      url: https://bsky.app/profile/example.com
+    # - label: LinkedIn
+    #   url: https://www.linkedin.com/company/example
+
+# FAQ items appended to every page, after the product-specific ones.
+common_faq:
+  - q: What does "Concept" mean?
+    a: >-
+      The service is being designed in the open. The demo shows how it will
+      work, but it is a static mockup and is not connected to a live server yet.
+  - q: How do I get access when it launches?
+    a: Follow us on one of the channels in the "Stay updated" section.

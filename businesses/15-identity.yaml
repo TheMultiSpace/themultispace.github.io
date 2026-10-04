@@ -1,0 +1,69 @@
+slug: identity
+order: 15
+name: Agent Identity
+accent: "#6d28d9"
+accent_dark: "#c4b5fd"
+tagline: A permanent phone number, inbox and ID for each of your agents.
+audience: For people and businesses whose agents talk to the outside world.
+
+problem: |
+  Your agent emails suppliers, calls a restaurant and messages a client, but it does all of that through your accounts or a throwaway address.
+
+  When you switch models or vendors, the agent's contacts lose track of it, and nobody can tell whether a message really came from your agent.
+
+how_it_works:
+  - title: Create an identity
+    text: Each agent gets its own name, phone number, inbox and verifiable ID.
+  - title: Connect any agent
+    text: Attach the identity to whichever agent software you use today.
+  - title: Keep it when you switch
+    text: Change models or vendors, and the identity, contacts and history stay with you.
+
+benefits:
+  - title: One stable address
+    text: Contacts reach the same agent identity even when the software behind it changes.
+  - title: Messages others can verify
+    text: Recipients can check that a message came from your agent and not an impostor.
+  - title: Kept separate from you
+    text: Your personal accounts stay out of your agent's work.
+  - title: Full history
+    text: Every call, email and message the agent sent or received, in one place.
+
+audiences:
+  - label: For people
+    pitch: Give your agent its own number and inbox, so it never needs to use yours.
+  - label: For businesses
+    pitch: Let customers and suppliers recognise and verify your company's agents, and keep those identities when you change vendors.
+  - label: For agents
+    agent: true
+    pitch: verify_agent(identity) returns who the agent acts for, when the identity was created and whether it is active.
+
+demo:
+  intro: A supplier checks that an incoming order email really came from a customer's agent.
+  tool:
+    name: verify_agent
+    description: Check who an agent identity belongs to and whether it is active.
+    inputs:
+      - name: identity
+        type: string
+        required: true
+        description: The agent's ID, email address or phone number.
+    returns: The organisation or person behind it, its creation date, its status and its public key.
+  example_request:
+    identity: "orders-agent@agents.example.com"
+  example_response:
+    acts_for: "Riverside Bakery Ltd"
+    verified_owner: true
+    created: "2026-03-14"
+    status: active
+    public_key: "ed25519:7Hq…Zk2"
+
+faq:
+  - q: Does this replace my agent's email service?
+    a: It works alongside existing agent email providers and adds a phone number and a verifiable ID.
+  - q: What happens to the identity if I stop using an agent?
+    a: It stays with you. You can pause it, attach it to another agent or close it.
+  - q: Can people tell they are talking to an agent?
+    a: Yes. Identities are clearly marked as agents acting for a named person or company.
+
+related: [attention, proofs]

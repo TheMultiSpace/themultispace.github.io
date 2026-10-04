@@ -1,0 +1,83 @@
+slug: frontdesk
+order: 3
+name: Agent Front Desk
+accent: "#b45309"
+accent_dark: "#fcd34d"
+tagline: When AI assistants book a plumber or a table, make sure they can book you.
+audience: For small businesses that take bookings by phone, message or calendar.
+
+problem: |
+  People are starting to ask AI assistants to find and book local services. The assistant books whoever it can reach.
+
+  Big chains will have that covered. A small business with a phone and a paper diary simply will not show up, and the booking goes to someone else.
+
+how_it_works:
+  - title: Connect what you already use
+    text: Link your calendar, phone number or messaging app. Setup takes about ten minutes.
+  - title: Describe your services
+    text: Add what you offer, your area, your hours and your usual prices in plain language.
+  - title: Take bookings from agents
+    text: Assistants can check your availability and book you. Each booking lands in your calendar as normal.
+
+benefits:
+  - title: Bookings from a new channel
+    text: Requests from AI assistants reach you instead of a competitor.
+  - title: Missed calls answered
+    text: Calls you cannot pick up get a reply and, where possible, a booking.
+  - title: No new system to learn
+    text: You keep working from the calendar and phone you already use.
+  - title: Always-current details
+    text: Hours, prices and availability stay up to date for every assistant at once.
+
+audiences:
+  - label: For business owners
+    pitch: Get bookings from AI assistants without changing how you work, and stop losing jobs to calls you could not answer.
+  - label: For agents
+    agent: true
+    pitch: find_availability(service, area, window) returns bookable slots; book_slot(slot_id, customer) confirms one.
+  - label: For people booking through an assistant
+    pitch: Your assistant can book the local businesses you actually like, not only the ones with big websites.
+
+demo:
+  intro: An assistant looks for a plumber in Dublin for tomorrow morning.
+  tool:
+    name: find_availability
+    description: Find open slots for a service from local businesses in an area.
+    inputs:
+      - name: service
+        type: string
+        required: true
+        description: What the customer needs, in plain words.
+      - name: area
+        type: string
+        required: true
+        description: Town, district or postcode.
+      - name: window
+        type: object
+        required: true
+        description: Earliest and latest acceptable start times.
+    returns: A list of businesses with open slots, typical price ranges and a slot ID for booking.
+  example_request:
+    service: "leaking kitchen tap"
+    area: "Rathmines, Dublin 6"
+    window: { from: "2026-10-05T08:00:00+01:00", to: "2026-10-05T12:00:00+01:00" }
+  example_response:
+    results:
+      - business: "Byrne Plumbing"
+        slot_id: "slt_5512"
+        start: "2026-10-05T09:30:00+01:00"
+        typical_price: "€80–€120 call-out"
+      - business: "Ranelagh Heating & Plumbing"
+        slot_id: "slt_7740"
+        start: "2026-10-05T11:00:00+01:00"
+        typical_price: "€95 call-out"
+
+faq:
+  - q: Do I need a website?
+    a: No. A calendar or a phone number is enough to get started.
+  - q: Can I approve bookings before they are confirmed?
+    a: Yes. You can choose instant booking or ask to approve each request.
+  - q: Which assistants can reach me?
+    a: Any assistant that can use MCP tools. We publish your details in a format they all read.
+
+related: [mirror, attention]

@@ -1,0 +1,85 @@
+slug: approvals
+order: 11
+name: Approval Queue
+accent: "#1d4ed8"
+accent_dark: "#93c5fd"
+tagline: One place for every question your agents need you to answer.
+audience: For people who use more than one AI agent at work or at home.
+
+problem: |
+  Your agents keep stopping to ask you things: approve this purchase, pick a time, confirm this email. Each one asks in a different app.
+
+  You end up answering the same kind of question again and again, and the ones you miss hold up the work for days.
+
+how_it_works:
+  - title: Agents send their questions here
+    text: Any agent can post a question with the options and a deadline.
+  - title: You answer in one place
+    text: Approve, reject or choose from your phone or desktop, one tap per question.
+  - title: Your answers become rules
+    text: Tell the queue "always yes for this", and that kind of question stops reaching you.
+
+benefits:
+  - title: One inbox for every agent
+    text: Questions from all your agents, in one list, sorted by deadline.
+  - title: Fewer questions over time
+    text: Each answer can become a standing rule, so routine questions answer themselves.
+  - title: Nothing stuck waiting
+    text: Reminders before a deadline, and a default answer if you choose one.
+  - title: A history of what you approved
+    text: Look back at every decision and which agent asked for it.
+
+audiences:
+  - label: For people
+    pitch: Stop answering your agents in five different apps. Answer once, in one place, and teach them what not to ask again.
+  - label: For agent builders
+    pitch: Add human approval to your agent with one call, instead of building your own notification and approval flow.
+  - label: For agents
+    agent: true
+    pitch: ask_owner(question, options, deadline) returns the owner's choice, or a standing rule that already answers it.
+
+demo:
+  intro: A travel agent asks its owner to choose between two hotels.
+  tool:
+    name: ask_owner
+    description: Ask the agent's owner a question and wait for their answer.
+    inputs:
+      - name: question
+        type: string
+        required: true
+        description: The question, in one sentence.
+      - name: options
+        type: array
+        required: true
+        description: The choices to show, each with a short label.
+      - name: deadline
+        type: string
+        required: false
+        description: When the answer is needed, in ISO 8601.
+      - name: default
+        type: string
+        required: false
+        description: The option to use if there is no answer by the deadline.
+    returns: The chosen option, who answered, and whether a standing rule answered it.
+  example_request:
+    question: "Which hotel for the Lisbon trip, 11–13 November?"
+    options:
+      - "Hotel A, €142/night, 5 min walk to venue"
+      - "Hotel B, €118/night, 20 min by metro"
+    deadline: "2026-10-06T12:00:00+01:00"
+    default: "Hotel A, €142/night, 5 min walk to venue"
+  example_response:
+    answer: "Hotel B, €118/night, 20 min by metro"
+    answered_by: owner
+    answered_at: "2026-10-04T21:02:00+01:00"
+    standing_rule_created: "Prefer the cheaper hotel when the difference is over €20/night"
+
+faq:
+  - q: Which agents can use it?
+    a: Any agent that can call an MCP tool or an HTTP endpoint.
+  - q: Can someone else answer for me?
+    a: Yes. You can share the queue with a colleague or family member for certain kinds of questions.
+  - q: Where do I see the questions?
+    a: On the web and on your phone, with notifications for anything close to its deadline.
+
+related: [mandates, spend]

@@ -1,0 +1,83 @@
+slug: recorder
+order: 8
+name: Flight Recorder
+accent: "#334155"
+accent_dark: "#cbd5e1"
+tagline: A tamper-evident record of what your agent saw, decided and did.
+audience: For companies that run AI agents on behalf of customers or staff.
+
+problem: |
+  When an agent does something unexpected, the first question is why. The second is whether you can show what really happened.
+
+  Application logs are scattered, easy to change and hard for anyone outside your team to read.
+
+how_it_works:
+  - title: Add one line to your agent
+    text: Each step it takes, what it read, what it decided and what it did, is sent to the recorder.
+  - title: Records are sealed
+    text: Each entry is chained to the previous one, so any later change is visible.
+  - title: Replay any session
+    text: Open a timeline of a session, share it with a customer or export it for review.
+
+benefits:
+  - title: Clear answers to "why"
+    text: See the inputs and reasoning behind every action, in order.
+  - title: Records others can check
+    text: Anyone you share a record with can confirm it has not been altered.
+  - title: One place for every agent
+    text: Agents from different vendors and frameworks write to the same timeline.
+  - title: Ready for review
+    text: Export sessions in a format auditors and regulators can read.
+
+audiences:
+  - label: For companies running agents
+    pitch: Know exactly why your agent did something, and be able to show it to anyone who asks.
+  - label: For reviewers and auditors
+    pitch: Read a clear, checkable timeline instead of piecing together logs from several systems.
+  - label: For agents
+    agent: true
+    pitch: record_step(session_id, observed, decided, action) appends a sealed entry and returns its hash.
+
+demo:
+  intro: An agent records the step where it chose a flight.
+  tool:
+    name: record_step
+    description: Append a sealed entry to a session's timeline.
+    inputs:
+      - name: session_id
+        type: string
+        required: true
+        description: The session this step belongs to.
+      - name: observed
+        type: string
+        required: true
+        description: What the agent saw or received.
+      - name: decided
+        type: string
+        required: true
+        description: What it decided and why, in a sentence.
+      - name: action
+        type: object
+        required: false
+        description: The tool call it made, if any.
+    returns: The entry's sequence number, hash and the hash of the previous entry.
+  example_request:
+    session_id: "ses_9c02"
+    observed: "Three flights Dublin to Lisbon under €200 on 12 November"
+    decided: "Chose the 10:40 departure: cheapest option that arrives before the 15:00 meeting"
+    action: { tool: "book_flight", arguments: { flight: "DL-LIS-1040" } }
+  example_response:
+    sequence: 14
+    hash: "b7e2…41af"
+    previous_hash: "09c1…d3e8"
+    recorded_at: "2026-10-04T20:40:12Z"
+
+faq:
+  - q: Do you see my customers' data?
+    a: You choose what each entry contains, and sensitive fields can be stored as references instead of content.
+  - q: Which agent frameworks does it work with?
+    a: Any agent that can make an MCP or HTTP call can write to the recorder.
+  - q: How do others check a record?
+    a: A shared record includes its chain of hashes, which can be checked independently.
+
+related: [disputes, simulator]

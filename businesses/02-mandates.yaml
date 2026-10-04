@@ -1,0 +1,84 @@
+slug: mandates
+order: 2
+name: Agent Mandates
+accent: "#4338ca"
+accent_dark: "#a5b4fc"
+tagline: Let your agent spend money without handing it your card.
+audience: For people who want agents to buy things, and for shops that want to sell to them.
+
+problem: |
+  Giving an agent your card details is all or nothing. It can spend any amount, anywhere, until you notice.
+
+  Shops have the opposite worry: an order arrives from software, and they cannot tell who is behind it or what it was allowed to buy.
+
+how_it_works:
+  - title: You set the rules
+    text: Choose a spending limit, what the agent may buy, from whom, and when the permission expires.
+  - title: Your agent carries a mandate
+    text: Instead of card details, it presents a signed permission that shops can check in one call.
+  - title: You stay in control
+    text: See every use of the mandate as it happens, and revoke it with one tap.
+
+benefits:
+  - title: Limits that actually hold
+    text: An agent cannot go past the amount, category or date you set.
+  - title: One switch to stop everything
+    text: Revoking a mandate ends it everywhere at once.
+  - title: Orders with a name behind them
+    text: Shops see who the agent acts for and what it is permitted to do before they accept.
+  - title: Works alongside your existing payment method
+    text: Mandates sit on top of the card or account you already use.
+
+audiences:
+  - label: For people
+    pitch: Let your agent book the flights and order the groceries, within limits you choose and can cancel at any moment.
+  - label: For shops and platforms
+    pitch: Accept orders from AI agents and see, before you ship, who they act for and what they are allowed to spend.
+  - label: For agents
+    agent: true
+    pitch: check_mandate(mandate_id, merchant, amount, category) returns whether a purchase is within the owner's permission.
+
+demo:
+  intro: A shop checks whether an incoming agent order is covered by its owner's mandate.
+  tool:
+    name: check_mandate
+    description: Check whether a purchase falls within the permission an owner has given their agent.
+    inputs:
+      - name: mandate_id
+        type: string
+        required: true
+        description: The mandate the agent presented with its order.
+      - name: merchant
+        type: string
+        required: true
+        description: The merchant's registered identifier.
+      - name: amount
+        type: object
+        required: true
+        description: Value and currency of the purchase.
+      - name: category
+        type: string
+        required: false
+        description: What is being bought, for example groceries or travel.
+    returns: Whether the purchase is allowed, the remaining limit, and the mandate's expiry.
+  example_request:
+    mandate_id: "mdt_31c9"
+    merchant: "merchant_freshbasket_ie"
+    amount: { value: 86.40, currency: EUR }
+    category: groceries
+  example_response:
+    allowed: true
+    owner: "verified person"
+    remaining_limit: { value: 113.60, currency: EUR }
+    allowed_categories: [groceries, household]
+    expires_at: "2026-10-31T23:59:00Z"
+
+faq:
+  - q: Does the agent ever see my card number?
+    a: No. The agent only holds the mandate, which is useless outside the limits you set.
+  - q: What happens when I revoke a mandate?
+    a: Any check against it from that moment returns "not allowed", so new purchases stop immediately.
+  - q: Do shops need to change their checkout?
+    a: They add one check before accepting an agent order. Everything else stays the same.
+
+related: [spend, approvals]

@@ -1,0 +1,79 @@
+slug: router
+order: 10
+name: Smart Router
+accent: "#c2410c"
+accent_dark: "#fdba74"
+tagline: Describe the task. We send it to the provider that does it best right now.
+audience: For teams building agents that depend on outside tools and APIs.
+
+problem: |
+  Your agent depends on a handful of outside services: search, transcription, maps, translation. You picked them months ago, and you hardcoded them.
+
+  Since then prices changed, new providers appeared and one of them has been failing every afternoon. Your agent has no way to know.
+
+how_it_works:
+  - title: Describe the task
+    text: Your agent sends the job, its budget and how fast it needs the result.
+  - title: We pick the provider
+    text: The call goes to whichever provider currently gives the best results within your limits.
+  - title: You get the result and the receipt
+    text: The answer comes back with which provider did it, what it cost and how long it took.
+
+benefits:
+  - title: Better results without rework
+    text: Providers are chosen on measured outcomes, not on what you knew at setup time.
+  - title: Automatic fallback
+    text: When a provider fails or slows down, the next one takes the call.
+  - title: Lower costs
+    text: You set the budget per call, and the cheapest provider that meets it is used.
+  - title: One integration instead of many
+    text: Add new providers without changing your agent.
+
+audiences:
+  - label: For agent builders
+    pitch: Stop hardcoding vendors. Each call goes to the provider that is best right now, with automatic fallback.
+  - label: For tool providers
+    pitch: Get traffic based on how well your service performs, not on who signed the first contract.
+  - label: For agents
+    agent: true
+    pitch: route(task, budget, max_latency) returns the result, the provider used, the cost and the time taken.
+
+demo:
+  intro: An agent needs a two-minute voice note transcribed.
+  tool:
+    name: route
+    description: Send a task to the best available provider within a budget and time limit.
+    inputs:
+      - name: task
+        type: object
+        required: true
+        description: The task type and its input.
+      - name: budget
+        type: object
+        required: false
+        description: Maximum cost for this call.
+      - name: max_latency
+        type: string
+        required: false
+        description: Maximum time to wait, as an ISO 8601 duration.
+    returns: The provider's result, plus the provider name, cost, latency and any fallbacks used.
+  example_request:
+    task: { type: "transcribe", input: "voice_note_0412.m4a", language: "en-IE" }
+    budget: { value: 0.05, currency: EUR }
+    max_latency: "PT20S"
+  example_response:
+    result: "Hi, it's Declan. I can do Thursday at three if that still suits."
+    provider: "provider_b"
+    cost: { value: 0.012, currency: EUR }
+    latency: "PT4.1S"
+    fallbacks_used: ["provider_a timed out after 8s"]
+
+faq:
+  - q: How do you decide which provider is best?
+    a: We measure each provider's results, speed and cost on real calls and route based on the latest figures.
+  - q: Can I exclude or prefer certain providers?
+    a: Yes. Each call can include allow and block lists.
+  - q: Which kinds of tasks are supported?
+    a: We start with search, transcription, translation and geocoding.
+
+related: [facts, simulator]

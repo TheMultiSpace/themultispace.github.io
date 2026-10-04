@@ -1,0 +1,77 @@
+slug: disputes
+order: 7
+name: Fast Disputes
+accent: "#7e22ce"
+accent_dark: "#d8b4fe"
+tagline: Settle small disputes over agent orders in a day, for less than they cost to argue.
+audience: For shops and platforms that receive orders placed by AI agents.
+
+problem: |
+  When an agent orders the wrong size, books the wrong date or misreads the terms, someone has to sort it out. For a €15 order, the back-and-forth costs more than the order itself.
+
+  Card chargebacks are slow and blunt, and courts are not an option for amounts this small.
+
+how_it_works:
+  - title: Send the dispute
+    text: Submit the order, both sides' accounts and any agent logs in one call.
+  - title: The case is reviewed
+    text: The order details, the terms and the agent's instructions are compared against what happened.
+  - title: Get a decision
+    text: Both sides receive a short written decision within a day, in a format their systems can act on.
+
+benefits:
+  - title: Fast
+    text: Decisions arrive within a day instead of weeks.
+  - title: Less work
+    text: One call sends the whole case, instead of days of back-and-forth.
+  - title: Reasoned
+    text: Every decision explains which facts mattered, in a short written summary.
+  - title: Ready to act on
+    text: Decisions come as data your systems can process, such as refund, replace or close.
+
+audiences:
+  - label: For shops and platforms
+    pitch: Stop spending support hours on small agent-order disputes. Send them here and get a decision tomorrow.
+  - label: For people
+    pitch: When your agent's order goes wrong, get a quick decision without fighting your way through support.
+  - label: For agents
+    agent: true
+    pitch: open_dispute(order_id, claim, evidence) returns a case ID; get_decision(case_id) returns the outcome and reasons.
+
+demo:
+  intro: A shop opens a dispute about an agent that ordered the wrong shoe size.
+  tool:
+    name: open_dispute
+    description: Open a case about an order placed by an agent.
+    inputs:
+      - name: order_id
+        type: string
+        required: true
+        description: The order in question.
+      - name: claim
+        type: string
+        required: true
+        description: What went wrong, in one or two sentences.
+      - name: evidence
+        type: array
+        required: false
+        description: Order records, messages or agent logs that support the claim.
+    returns: A case ID and the expected decision time.
+  example_request:
+    order_id: "ord_66120"
+    claim: "Customer's agent ordered size 44; customer says the instruction was size 42."
+    evidence: ["order_record.json", "agent_instruction_log.json"]
+  example_response:
+    case_id: "case_1874"
+    status: under_review
+    decision_expected_by: "2026-10-05T20:00:00+01:00"
+
+faq:
+  - q: Who makes the decision?
+    a: Trained reviewers, supported by tools that compare the order records with the agent's instructions.
+  - q: Do both sides have to agree to use it?
+    a: Yes. Platforms can include it in their terms so it applies to all agent orders.
+  - q: What size of dispute fits?
+    a: It is designed for small orders where normal dispute handling costs more than the order.
+
+related: [recorder, bids]

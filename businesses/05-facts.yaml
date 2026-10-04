@@ -1,0 +1,76 @@
+slug: facts
+order: 5
+name: Verified Facts
+accent: "#0369a1"
+accent_dark: "#7dd3fc"
+tagline: Ground truth for agents, with a timestamp and evidence on every answer.
+audience: For teams building agents that act on facts about the real world.
+
+problem: |
+  Agents act on what they read: opening hours, prices, stock levels, whether a listing exists. Much of that information online is stale, and more of it is now written by other agents to influence yours.
+
+  When an agent acts on a wrong fact, the mistake is not a bad answer. It is a wasted trip, a failed booking or a purchase that should not have happened.
+
+how_it_works:
+  - title: Your agent asks a question
+    text: It states the claim to check and how fresh the answer needs to be.
+  - title: We check the sources
+    text: Official feeds, direct checks with the business and, when needed, a person on the ground.
+  - title: You get evidence, not just an answer
+    text: Every result comes with when it was checked, how, and where the evidence is.
+
+benefits:
+  - title: Fresh answers
+    text: You set the maximum age of the information, from minutes to days.
+  - title: Evidence attached
+    text: Each answer links to what it was based on, so your agent can show its reasoning.
+  - title: Honest uncertainty
+    text: When something cannot be confirmed, the answer says "unknown" instead of guessing.
+  - title: One call for many kinds of facts
+    text: Opening hours, prices, availability, existence of a business or listing.
+
+audiences:
+  - label: For agent builders
+    pitch: Stop your agent acting on stale or planted information. Check the facts that matter before it commits.
+  - label: For agents
+    agent: true
+    pitch: verify(claim, max_age) returns true, false or unknown with evidence, a timestamp and a confidence score.
+  - label: For businesses
+    pitch: Publish your hours, prices and availability once, and have them checked and repeated correctly to every agent.
+
+demo:
+  intro: An agent checks that a pharmacy is open before sending its user there.
+  tool:
+    name: verify
+    description: Check a claim about the real world and return the answer with evidence.
+    inputs:
+      - name: claim
+        type: string
+        required: true
+        description: The statement to check, in plain language.
+      - name: max_age
+        type: string
+        required: false
+        description: Oldest acceptable evidence, as an ISO 8601 duration such as PT1H.
+    returns: true, false or unknown, with evidence, the check time, the method and a confidence score.
+  example_request:
+    claim: "Corner Pharmacy on Main Street is open right now"
+    max_age: "PT1H"
+  example_response:
+    answer: "true"
+    confidence: 0.94
+    checked_at: "2026-10-04T20:31:00+01:00"
+    method: "business-published hours, confirmed by phone check"
+    evidence:
+      - "hours feed updated 2026-10-04T08:00"
+      - "phone check 2026-10-04T20:31, staff confirmed open until 22:00"
+
+faq:
+  - q: What happens when you cannot confirm something?
+    a: The answer is "unknown", along with what was tried. Your agent decides what to do next.
+  - q: Which kinds of facts can I check?
+    a: We start with opening hours, prices, availability and whether a business or listing exists, and add more based on demand.
+  - q: Can I see how an answer was reached?
+    a: Yes. Every answer lists its sources and the time each was checked.
+
+related: [humans, router]

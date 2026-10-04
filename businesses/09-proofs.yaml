@@ -1,0 +1,83 @@
+slug: proofs
+order: 9
+name: Prove It
+accent: "#0e7490"
+accent_dark: "#67e8f9"
+tagline: Prove you are over 18, local or able to pay, without sending the document.
+audience: For people who are tired of uploading passports and bank statements, and the businesses that ask for them.
+
+problem: |
+  Renting a flat, opening an account or booking a car means sending copies of your passport, payslips and bills to people you have never met.
+
+  Your agent will be asked for the same things, and it should not be handing your documents around either.
+
+how_it_works:
+  - title: Add your documents once
+    text: Your documents are checked and stored in a vault that only you control.
+  - title: Someone asks a question
+    text: A landlord, shop or another agent asks a narrow question, such as "is this person over 18?"
+  - title: Share the answer, not the document
+    text: You or your agent approve, and they receive a signed yes or no.
+
+benefits:
+  - title: Less of your data in other people's files
+    text: Businesses get the answer they need, not a copy of your passport.
+  - title: Faster checks
+    text: A question that used to take an upload and a wait now takes a tap.
+  - title: Safe for your agent to use
+    text: Your agent can answer routine checks for you without ever holding your documents.
+  - title: Fewer documents for businesses to store
+    text: Keep a signed answer instead of a folder of sensitive copies.
+
+audiences:
+  - label: For people
+    pitch: Prove what someone needs to know, and keep your passport, payslips and bank statements to yourself.
+  - label: For businesses
+    pitch: Get a signed answer to the question you actually have, and stop storing documents you never wanted.
+  - label: For agents
+    agent: true
+    pitch: request_proof(subject, question) returns a signed yes or no once the person approves.
+
+demo:
+  intro: A letting agent asks whether an applicant's income is above a threshold.
+  tool:
+    name: request_proof
+    description: Ask a person to prove a specific fact without revealing the underlying documents.
+    inputs:
+      - name: subject
+        type: string
+        required: true
+        description: The person's vault address.
+      - name: question
+        type: string
+        required: true
+        description: A yes-or-no question from the supported list.
+      - name: purpose
+        type: string
+        required: true
+        description: Why you are asking, shown to the person before they approve.
+      - name: parameters
+        type: object
+        required: false
+        description: Values the question needs, such as an income threshold.
+    returns: A signed yes or no, the issuer, and the time of the proof.
+  example_request:
+    subject: "vault:niamh"
+    question: "annual_income_above"
+    parameters: { value: 45000, currency: EUR }
+    purpose: "Rental application for 3 Harbour View"
+  example_response:
+    answer: true
+    signed_by: "proofs issuer key 2026-A"
+    issued_at: "2026-10-04T20:44:00+01:00"
+    shared_fields: []
+
+faq:
+  - q: Which questions can be answered?
+    a: We start with age, residence, identity and income thresholds, and add more as people ask for them.
+  - q: Does the business see my documents?
+    a: No. They receive only the signed answer to their question.
+  - q: How does this relate to government digital identity wallets?
+    a: We plan to read from official wallets where they exist, so you can reuse what you already have.
+
+related: [mandates, identity]

@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{ site.family_name }}</title>
+<meta name="description" content="{{ site.family_tagline }}">
+<meta property="og:title" content="{{ site.family_name }}">
+<meta property="og:description" content="{{ site.family_tagline }}">
+<meta property="og:type" content="website">
+<meta property="og:url" content="{{ base_url }}">
+<link rel="canonical" href="{{ base_url }}">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #f3f5f8; --surface: #ffffff; --ink: #17203a; --muted: #56607a; --line: #d9dee8;
+  --sans: "Instrument Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root { --bg: #10162a; --surface: #182038; --ink: #e8ecf5; --muted: #a3acc2; --line: #2b3552; }
+}
+*, *::before, *::after { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 400 1.0625rem/1.6 var(--sans); }
+.wrap { max-width: 1080px; margin: 0 auto; padding: 48px 16px 64px; }
+@media (min-width: 720px) { .wrap { padding: 72px 32px 80px; } }
+h1 { font-size: clamp(2.2rem, 6vw, 3.6rem); line-height: 1.1; letter-spacing: -0.025em; margin: 0; max-width: 20ch; }
+.lede { color: var(--muted); font-size: 1.2rem; max-width: 60ch; margin: 20px 0 48px; }
+.grid { list-style: none; padding: 0; margin: 0; display: grid; gap: 16px; }
+@media (min-width: 640px) { .grid { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 980px) { .grid { grid-template-columns: repeat(3, 1fr); } }
+.grid a {
+  display: block; height: 100%; text-decoration: none; color: inherit; background: var(--surface);
+  border: 1px solid var(--line); border-top: 4px solid var(--accent); border-radius: 8px; padding: 20px;
+}
+.grid a:hover, .grid a:focus-visible { border-color: var(--accent); }
+.grid a:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
+.grid h2 { font-size: 1.15rem; margin: 0 0 8px; }
+.grid p { margin: 0; color: var(--muted); font-size: .98rem; }
+.grid code { display: block; margin-top: 14px; font: 400 .8rem/1.4 var(--mono); color: var(--muted); overflow-wrap: anywhere; }
+.updates { margin-top: 56px; padding-top: 32px; border-top: 1px solid var(--line); }
+.updates a { margin-right: 16px; font-weight: 600; color: inherit; text-underline-offset: 3px; }
+</style>
+</head>
+<body>
+<main class="wrap">
+  <h1>{{ site.family_name }}</h1>
+  <p class="lede">{{ site.family_tagline }}</p>
+  <ul class="grid">
+    {% for s in siblings %}
+    <li><a href="{{ s.url }}" style="--accent: {{ s.accent }}">
+      <h2>{{ s.name }}</h2>
+      <p>{{ s.tagline }}</p>
+      <code>{{ s.signature }}</code>
+    </a></li>
+    {% endfor %}
+  </ul>
+  <p class="updates">{{ site.newsletter.headline }}:
+    {% for l in site.newsletter.links %}<a href="{{ l.url }}" rel="noopener">{{ l.label }}</a>{% endfor %}
+  </p>
+</main>
+</body>
+</html>

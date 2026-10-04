@@ -1,0 +1,51 @@
+# {{ b.name }}
+
+> {{ b.tagline }}
+
+{{ b.audience }}
+
+Status: {{ b.status }} (static mockup, no live server yet)
+Pricing: {{ pricing.headline }}
+Page: {{ page_url }}
+Tool definitions: {{ page_url }}tools.json
+
+## Problem
+
+{{ b.problem | trim }}
+
+## How it works
+
+{% for step in b.how_it_works %}{{ loop.index }}. {{ step.title }}: {{ step.text }}
+{% endfor %}
+
+## What you get
+
+{% for item in b.benefits %}- {{ item.title }}: {{ item.text }}
+{% endfor %}
+
+## Who it's for
+
+{% for a in b.audiences %}- {{ a.label }}: {{ a.pitch }}
+{% endfor %}
+
+## Tool
+
+{{ signature }}
+
+{{ b.demo.tool.description }}
+
+Inputs:
+{% for i in b.demo.tool.inputs %}- {{ i.name }} ({{ i.type }}{{ ", required" if i.get('required') }}): {{ i.description }}
+{% endfor %}
+
+Returns: {{ b.demo.tool.returns }}
+
+## Questions
+
+{% for item in faq %}- {{ item.q }} {{ item.a }}
+{% endfor %}
+
+## Updates
+
+{% for l in newsletter.links %}- {{ l.label }}: {{ l.url }}
+{% endfor %}

@@ -1,0 +1,80 @@
+slug: bids
+order: 6
+name: Open Bids
+accent: "#15803d"
+accent_dark: "#86efac"
+tagline: Say what you need and your maximum price. Providers compete for the job.
+audience: For people and businesses buying services that are usually quoted, not listed.
+
+problem: |
+  Getting three quotes for a move, a repair or a delivery takes calls, emails and follow-ups. Most people take the first reasonable price because comparing is too much work.
+
+  Providers lose out too: they spend time quoting jobs that were never going to happen.
+
+how_it_works:
+  - title: Post your request
+    text: Describe the job, the deadline and the most you are willing to pay.
+  - title: Providers bid
+    text: Their agents send offers within your limits, with dates and conditions.
+  - title: You pick one
+    text: Compare offers side by side, or let your agent choose using your rules.
+
+benefits:
+  - title: Real competition without the phone calls
+    text: Several offers arrive without you contacting anyone.
+  - title: Your ceiling, not theirs
+    text: Offers above your maximum never reach you.
+  - title: Offers you can compare
+    text: Every bid follows the same format, so price, timing and conditions line up.
+  - title: Serious buyers for providers
+    text: Providers only see requests with a stated budget and deadline.
+
+audiences:
+  - label: For buyers
+    pitch: Get competing offers for your job by posting it once, and only see the ones within your budget.
+  - label: For providers
+    pitch: See requests that come with a confirmed budget and deadline, and bid only on the ones you want.
+  - label: For agents
+    agent: true
+    pitch: post_request(job, deadline, max_price) opens a request; list_bids(request_id) returns offers in a common format.
+
+demo:
+  intro: A buyer's agent posts a small house move and checks the offers.
+  tool:
+    name: list_bids
+    description: List the offers received for an open request.
+    inputs:
+      - name: request_id
+        type: string
+        required: true
+        description: The request returned by post_request.
+      - name: sort
+        type: string
+        required: false
+        description: price, date or rating.
+    returns: Offers with price, date, provider and conditions, in a common format.
+  example_request:
+    request_id: "req_2207"
+    sort: price
+  example_response:
+    request: "Move a one-bedroom flat, Cork city to Limerick, by 20 October"
+    max_price: { value: 900, currency: EUR }
+    bids:
+      - provider: "provider_4471"
+        price: { value: 640, currency: EUR }
+        date: "2026-10-18"
+        conditions: "Includes two movers and packing materials"
+      - provider: "provider_1093"
+        price: { value: 720, currency: EUR }
+        date: "2026-10-16"
+        conditions: "Includes disassembly of one bed frame"
+
+faq:
+  - q: What kinds of jobs fit?
+    a: Jobs that are normally quoted rather than priced on a website, such as moves, repairs, deliveries and small projects.
+  - q: Do I have to accept any bid?
+    a: No. A request can close without a winner.
+  - q: Can providers see each other's bids?
+    a: No. Each provider only sees the request and their own offer.
+
+related: [disputes, router]

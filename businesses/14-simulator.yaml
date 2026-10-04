@@ -1,0 +1,80 @@
+slug: simulator
+order: 14
+name: Agent Simulator
+accent: "#4d7c0f"
+accent_dark: "#bef264"
+tagline: Test your agent against realistic fake shops, banks and airlines before it touches real ones.
+audience: For teams building agents that buy, book, pay or sign on someone's behalf.
+
+problem: |
+  You cannot test a booking agent by booking real flights, and you cannot test a payment agent with real money.
+
+  So most agents meet their first difficult situation in production: a sold-out flight, a changed price, a seller who tries to trick them.
+
+how_it_works:
+  - title: Pick a world
+    text: Choose from simulated airlines, shops, banks, landlords and marketplaces.
+  - title: Choose the scenarios
+    text: Normal days, sold-out stock, price changes mid-checkout, hostile sellers and slow services.
+  - title: Read the results
+    text: See where your agent succeeded, where it failed and what it did at each step.
+
+benefits:
+  - title: Find failures early
+    text: Problems show up in rehearsal instead of in front of a customer.
+  - title: Realistic difficulty
+    text: Scenarios include the awkward cases real services produce, not only the happy path.
+  - title: Repeatable tests
+    text: Run the same scenarios after every change and compare the results.
+  - title: Adversarial cases included
+    text: Test how your agent handles misleading offers and manipulative counterparties.
+
+audiences:
+  - label: For agent builders
+    pitch: Rehearse your agent against realistic services and difficult situations before it spends real money.
+  - label: For teams evaluating agents
+    pitch: Compare agents on the same scenarios and see which one handles real-world mess best.
+  - label: For agents
+    agent: true
+    pitch: start_scenario(world, scenario) returns sandbox endpoints that behave like the real services, plus a run ID for the results.
+
+demo:
+  intro: A team tests its travel agent against a flight that sells out mid-booking.
+  tool:
+    name: start_scenario
+    description: Start a simulated world with a chosen scenario and return its sandbox endpoints.
+    inputs:
+      - name: world
+        type: string
+        required: true
+        description: The simulated environment, such as airline, shop or bank.
+      - name: scenario
+        type: string
+        required: true
+        description: The situation to test.
+      - name: seed
+        type: integer
+        required: false
+        description: Fix this to make a run repeatable.
+    returns: A run ID, sandbox endpoints for the simulated services, and a link to the run report.
+  example_request:
+    world: airline
+    scenario: "sold_out_during_checkout"
+    seed: 42
+  example_response:
+    run_id: "run_3310"
+    endpoints:
+      search_flights: "sandbox://airline/run_3310/search"
+      book_flight: "sandbox://airline/run_3310/book"
+    report: "runs/run_3310/report.json"
+    scenario_notes: "The cheapest flight sells out after the agent selects seats"
+
+faq:
+  - q: Do I need to change my agent to use it?
+    a: Point its tools at the sandbox endpoints instead of the real ones. Nothing else changes.
+  - q: Can I write my own scenarios?
+    a: Yes. Scenarios are described in plain files you can edit and share.
+  - q: How do I read the results?
+    a: Each run produces a step-by-step report of what the agent saw, decided and did.
+
+related: [recorder, router]

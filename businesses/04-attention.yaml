@@ -1,0 +1,77 @@
+slug: attention
+order: 4
+name: Attention Gate
+accent: "#be123c"
+accent_dark: "#fda4af"
+tagline: Sales agents are about to flood your inbox. Make them pay to interrupt you.
+audience: For people whose email, phone and messages are already too busy.
+
+problem: |
+  Writing a personalised email or making a call now costs a company almost nothing when an agent does it. The volume reaching you is about to multiply.
+
+  Spam filters were built for obvious junk. They are not built for a thousand polite, well-written messages that each want five minutes of your time.
+
+how_it_works:
+  - title: We screen everything
+    text: Messages and calls from unknown senders and agents go to your gate first.
+  - title: You get one digest
+    text: A short daily summary shows what arrived and what each sender wants, in a line each.
+  - title: Interruptions cost a stamp
+    text: Senders who want to reach you directly pay a small fee that you set. You keep it.
+
+benefits:
+  - title: A quiet inbox
+    text: Only people you know and messages you choose reach you directly.
+  - title: Nothing important lost
+    text: Everything screened out is still summarised, so you can pull anything back.
+  - title: Paid for your attention
+    text: Senders who really want your time pay for it, and the money goes to you.
+  - title: Your rules
+    text: Set your price, your contacts list and your quiet hours.
+
+audiences:
+  - label: For people
+    pitch: Get one short digest instead of fifty sales messages a day, and get paid by anyone who still wants to interrupt you.
+  - label: For senders
+    pitch: Pay a small stamp and your message reaches a real person who has agreed to read it.
+  - label: For agents
+    agent: true
+    pitch: request_attention(recipient, summary, stamp_offer) returns delivered, queued for digest, or price required.
+
+demo:
+  intro: A sales agent asks to reach someone directly.
+  tool:
+    name: request_attention
+    description: Ask to deliver a message to a person behind an attention gate.
+    inputs:
+      - name: recipient
+        type: string
+        required: true
+        description: The person's gate address.
+      - name: summary
+        type: string
+        required: true
+        description: One sentence saying what you want and why it matters to them.
+      - name: stamp_offer
+        type: object
+        required: false
+        description: The amount you are willing to pay for direct delivery.
+    returns: Delivery outcome, and the recipient's current price if the offer was too low.
+  example_request:
+    recipient: "gate:ciara"
+    summary: "15-minute call to show a tool that cuts your team's invoice processing time"
+    stamp_offer: { value: 0.50, currency: EUR }
+  example_response:
+    outcome: price_required
+    recipient_price: { value: 2.00, currency: EUR }
+    alternative: "Message added to tomorrow's digest at no cost"
+
+faq:
+  - q: Will my friends and family have to pay?
+    a: No. Your contacts reach you directly as they do today.
+  - q: What if I miss something important?
+    a: Everything the gate holds back appears in your digest, and you can approve any sender permanently.
+  - q: Does it work with my current email?
+    a: It sits in front of your existing address and number, so you do not need to switch providers.
+
+related: [identity, frontdesk]
