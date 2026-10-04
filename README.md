@@ -11,6 +11,7 @@ service the agent economy is missing.
 | `businesses/*.yaml` | One file per service (name, pitch, demo tool, FAQ) |
 | `templates/` | Jinja templates for the pages, `llms.txt` and the index |
 | `build.py` | Generates `dist/` from the above |
+| `pyproject.toml`, `uv.lock` | Dependencies, managed with [uv](https://docs.astral.sh/uv/) |
 
 Each service is published at `https://themultispace.github.io/<slug>/`, together with
 `llms.txt` (plain-text summary for AI agents) and `tools.json` (MCP-style tool definition, mockup).
@@ -18,13 +19,12 @@ Each service is published at `https://themultispace.github.io/<slug>/`, together
 ## Build locally
 
 ```sh
-pip install -r requirements.txt
-python build.py                      # writes dist/
-python -m http.server -d dist 8000   # preview at http://localhost:8000/
+uv run build.py                          # installs deps on first run, writes dist/
+uv run -m http.server -d dist 8000       # preview at http://localhost:8000/
 ```
 
-`python build.py --local` makes links point at `index.html` files so `dist/` can be opened
-straight from disk. `python build.py --only humans` rebuilds a single page.
+`uv run build.py --local` makes links point at `index.html` files so `dist/` can be opened
+straight from disk. `uv run build.py --only humans` rebuilds a single page.
 
 ## Deploy
 

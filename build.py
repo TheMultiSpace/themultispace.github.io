@@ -3,24 +3,27 @@
 
 Layout expected next to this script:
 
-    site.yaml               shared settings (domain, pricing, newsletter links, common FAQ)
+    site.yaml               shared settings (base_url, pricing, newsletter links, common FAQ)
     businesses/*.yaml       one file per business
-    templates/              page.html.j2, llms.txt.j2, index.html.j2
+    templates/              page.html.j2, llms.txt.j2, index.html.j2, index.llms.txt.j2
 
 Output (default: dist/):
 
-    dist/index.html                 overview page for the root domain
-    dist/<slug>/index.html          the business page   -> https://<slug>.<domain>/
+    dist/index.html                 home page           -> <base_url>
+    dist/llms.txt                   catalogue of every service, for AI agents
+    dist/tools.json                 every tool definition in one file
+    dist/<slug>/index.html          the business page   -> <base_url><slug>/
     dist/<slug>/llms.txt            plain-text summary for AI agents
     dist/<slug>/tools.json          MCP-style tool definition with example (mockup)
 
-Each dist/<slug>/ folder is meant to be served as the root of its subdomain.
+dist/ is published as-is to GitHub Pages (see .github/workflows/pages.yml).
+Links between pages are relative; canonical URLs use base_url from site.yaml.
 
 Usage:
-    pip install pyyaml jinja2
-    python build.py                 # links point to https://<slug>.<domain>/
-    python build.py --local         # links point to sibling folders, for previewing from disk
-    python build.py --only humans   # build a single page
+    uv sync
+    uv run build.py                 # links like ../<slug>/, for serving over HTTP
+    uv run build.py --local         # links like ../<slug>/index.html, for opening from disk
+    uv run build.py --only humans   # build a single page
 """
 
 from __future__ import annotations
@@ -40,7 +43,7 @@ REQUIRED_KEYS = [
     "slug", "name", "accent", "tagline", "audience", "problem",
     "how_it_works", "benefits", "audiences", "demo", "faq",
 ]
-SLUG_RE = re.compile(r"^[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?$")  # valid DNS label
+SLUG_RE = re.compile(r"^[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?$")  # lowercase URL-safe slug
 HEX_RE = re.compile(r"^#[0-9a-fA-F]{6}$")
 
 
@@ -88,7 +91,7 @@ def validate(businesses: list[dict]) -> None:
             continue
 
         if not SLUG_RE.match(str(b["slug"])):
-            errors.append(f"{where}: slug '{b['slug']}' is not a valid subdomain name")
+            errors.append(f"{where}: slug '{b['slug']}' is not a valid URL path segment")
         if slugs.count(b["slug"]) > 1:
             errors.append(f"{where}: slug '{b['slug']}' is used more than once")
         for key in ("accent", "accent_dark"):
@@ -118,6 +121,16 @@ def validate(businesses: list[dict]) -> None:
         raise BuildError("\n".join(errors))
 
 
+def validate_groups(site: dict, businesses: list[dict]) -> None:
+    slugs = {b["slug"] for b in businesses}
+    seen: list[str] = [s for g in site["home"]["groups"] for s in g["slugs"]]
+    errors = [f"site.yaml: home.groups lists unknown slug '{s}'" for s in seen if s not in slugs]
+    errors += [f"site.yaml: home.groups lists '{s}' more than once" for s in set(seen) if seen.count(s) > 1]
+    errors += [f"site.yaml: home.groups is missing '{s}'" for s in sorted(slugs - set(seen))]
+    if errors:
+        raise BuildError("\n".join(errors))
+
+
 # ---------------------------------------------------------------- helpers
 
 def paragraphs(text: str) -> list[str]:
@@ -135,26 +148,27 @@ def pretty(obj) -> str:
 
 
 def tools_json(b: dict) -> dict:
+    return {"x-status": "static mockup, not a live MCP server", "tools": [tool_def(b)]}
+
+
+def tool_def(b: dict) -> dict:
     tool = b["demo"]["tool"]
     return {
-        "x-status": "static mockup, not a live MCP server",
-        "tools": [{
-            "name": tool["name"],
-            "description": tool["description"],
-            "inputSchema": {
-                "type": "object",
-                "properties": {
-                    i["name"]: {"type": i["type"], "description": i["description"]}
-                    for i in tool["inputs"]
-                },
-                "required": [i["name"] for i in tool["inputs"] if i.get("required")],
+        "name": tool["name"],
+        "description": tool["description"],
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                i["name"]: {"type": i["type"], "description": i["description"]}
+                for i in tool["inputs"]
             },
-            "x-returns": tool["returns"],
-            "x-example": {
-                "arguments": b["demo"]["example_request"],
-                "result": b["demo"]["example_response"],
-            },
-        }],
+            "required": [i["name"] for i in tool["inputs"] if i.get("required")],
+        },
+        "x-returns": tool["returns"],
+        "x-example": {
+            "arguments": b["demo"]["example_request"],
+            "result": b["demo"]["example_response"],
+        },
     }
 
 
@@ -178,13 +192,15 @@ def build(args: argparse.Namespace) -> None:
     site = load_yaml(args.site)
     businesses = load_businesses(args.businesses)
     validate(businesses)
+    validate_groups(site, businesses)
 
-    domain = site["domain"]
+    base_url = site["base_url"].rstrip("/") + "/"
+    suffix = "index.html" if args.local else ""
 
-    def url_for(slug: str) -> str:
-        return f"../{slug}/index.html" if args.local else f"https://{slug}.{domain}/"
+    def url_for(slug: str, prefix: str = "../") -> str:
+        return f"{prefix}{slug}/{suffix}"
 
-    index_url_from_page = "../index.html" if args.local else f"https://{domain}/"
+    index_url_from_page = f"../{suffix}"
 
     env = Environment(
         loader=FileSystemLoader(args.templates),
@@ -198,11 +214,15 @@ def build(args: argparse.Namespace) -> None:
     page_tpl = env.get_template("page.html.j2")
     llms_tpl = env.get_template("llms.txt.j2")
     index_tpl = env.get_template("index.html.j2")
+    index_llms_tpl = env.get_template("index.llms.txt.j2")
 
     by_slug = {b["slug"]: b for b in businesses}
     siblings = [
-        {"slug": b["slug"], "name": b["name"], "tagline": b["tagline"], "accent": b["accent"],
-         "signature": signature(b["demo"]["tool"]), "url": url_for(b["slug"])}
+        {"slug": b["slug"], "name": b["name"], "tagline": b["tagline"], "audience": b["audience"],
+         "accent": b["accent"], "accent_dark": b.get("accent_dark") or b["accent"],
+         "tool": b["demo"]["tool"]["name"], "description": b["demo"]["tool"]["description"],
+         "signature": signature(b["demo"]["tool"]), "url": url_for(b["slug"]),
+         "page_url": f"{base_url}{b['slug']}/"}
         for b in businesses
     ]
 
@@ -216,7 +236,7 @@ def build(args: argparse.Namespace) -> None:
         b.setdefault("status", site.get("status_default", "Concept"))
         b.setdefault("accent_dark", None)
         b["demo"].setdefault("intro", "")
-        page_url = f"https://{b['slug']}.{domain}/"
+        page_url = f"{base_url}{b['slug']}/"
         ctx = {
             "site": site,
             "b": b,
@@ -240,7 +260,34 @@ def build(args: argparse.Namespace) -> None:
         (folder / "tools.json").write_text(pretty(tools_json(b)) + "\n", encoding="utf-8")
         print(f"built {b['slug']:<12} -> {folder.relative_to(out.parent) if out.parent in folder.parents else folder}")
 
-    (out / "index.html").write_text(index_tpl.render(site=site, siblings=siblings), encoding="utf-8")
+    root = {s["slug"]: dict(s, url=url_for(s["slug"], prefix="")) for s in siblings}
+    groups = [{"title": g["title"], "services": [root[s] for s in g["slugs"]]}
+              for g in site["home"]["groups"]]
+    home_ctx = {
+        "site": site, "home": site["home"], "groups": groups, "base_url": base_url,
+        "count": len(businesses),
+        "faq": list(site["home"].get("faq", [])) + list(site.get("common_faq", [])),
+        "json_ld": {
+            "@context": "https://schema.org",
+            "@type": "Organization",
+            "name": site["family_name"],
+            "description": site["family_tagline"],
+            "url": base_url,
+            "makesOffer": [
+                {"@type": "Offer", "price": "0", "priceCurrency": "EUR",
+                 "itemOffered": {"@type": "Service", "name": s["name"],
+                                 "description": s["tagline"], "url": s["page_url"]}}
+                for s in siblings
+            ],
+        },
+    }
+    (out / "index.html").write_text(index_tpl.render(home_ctx), encoding="utf-8")
+    (out / "llms.txt").write_text(index_llms_tpl.render(home_ctx), encoding="utf-8")
+    (out / "tools.json").write_text(pretty({
+        "x-status": "static mockup, not a live MCP server",
+        "tools": [dict(tool_def(b), **{"x-page": f"{base_url}{b['slug']}/"}) for b in businesses],
+    }) + "\n", encoding="utf-8")
+    (out / ".nojekyll").write_text("", encoding="utf-8")
     print(f"built index        -> {out / 'index.html'}")
 
 
