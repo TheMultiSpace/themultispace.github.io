@@ -47,9 +47,9 @@ home:
         tools.json next to its page and collected in the root tools.json.
 
 pricing:
-  headline: Free
+  headline: Free for a limited time
   text: >-
-    This service is free to use.
+    Free to use for a limited time only.
 
 # FAQ items appended to every page, after the product-specific ones.
 common_faq:
