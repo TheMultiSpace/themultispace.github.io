@@ -3,7 +3,7 @@
 
 Layout expected next to this script:
 
-    site.yaml               shared settings (base_url, pricing, newsletter links, common FAQ)
+    site.yaml               shared settings (base URL, pricing, home page, common FAQ)
     businesses/*.yaml       one file per business
     templates/              page.html.j2, llms.txt.j2, index.html.j2, index.llms.txt.j2
 
@@ -14,7 +14,7 @@ Output (default: dist/):
     dist/tools.json                 every tool definition in one file
     dist/<slug>/index.html          the business page   -> <base_url><slug>/
     dist/<slug>/llms.txt            plain-text summary for AI agents
-    dist/<slug>/tools.json          MCP-style tool definition with example (mockup)
+    dist/<slug>/tools.json          MCP tool definition, request and response
 
 dist/ is published as-is to GitHub Pages (see .github/workflows/pages.yml).
 Links between pages are relative; canonical URLs use base_url from site.yaml.
@@ -43,7 +43,7 @@ REQUIRED_KEYS = [
     "slug", "name", "accent", "tagline", "audience", "problem",
     "how_it_works", "benefits", "audiences", "demo", "faq",
 ]
-SLUG_RE = re.compile(r"^[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?$")  # lowercase URL-safe slug
+SLUG_RE = re.compile(r"^[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?$")  # lowercase URL path segment
 HEX_RE = re.compile(r"^#[0-9a-fA-F]{6}$")
 
 
@@ -147,12 +147,33 @@ def pretty(obj) -> str:
     return json.dumps(obj, indent=2, ensure_ascii=False)
 
 
-def tools_json(b: dict) -> dict:
-    return {"x-status": "static mockup, not a live MCP server", "tools": [tool_def(b)]}
+def mcp_exchange(b: dict) -> tuple[dict, dict]:
+    """JSON-RPC tools/call request and response for the service's recorded call."""
+    tool = b["demo"]["tool"]
+    payload = b["demo"]["example_response"]
+    request = {
+        "jsonrpc": "2.0",
+        "id": 1,
+        "method": "tools/call",
+        "params": {
+            "name": tool["name"],
+            "arguments": b["demo"]["example_request"],
+        },
+    }
+    response = {
+        "jsonrpc": "2.0",
+        "id": 1,
+        "result": {
+            "structuredContent": payload,
+            "isError": False,
+        },
+    }
+    return request, response
 
 
 def tool_def(b: dict) -> dict:
     tool = b["demo"]["tool"]
+    request, response = mcp_exchange(b)
     return {
         "name": tool["name"],
         "description": tool["description"],
@@ -164,12 +185,13 @@ def tool_def(b: dict) -> dict:
             },
             "required": [i["name"] for i in tool["inputs"] if i.get("required")],
         },
-        "x-returns": tool["returns"],
-        "x-example": {
-            "arguments": b["demo"]["example_request"],
-            "result": b["demo"]["example_response"],
-        },
+        "request": request,
+        "response": response,
     }
+
+
+def tools_json(b: dict) -> dict:
+    return {"tools": [tool_def(b)]}
 
 
 def json_ld(b: dict, site: dict, page_url: str) -> dict:
@@ -233,21 +255,19 @@ def build(args: argparse.Namespace) -> None:
         raise BuildError(f"No business matches --only {' '.join(args.only)}")
 
     for b in selected:
-        b.setdefault("status", site.get("status_default", "Concept"))
         b.setdefault("accent_dark", None)
         b["demo"].setdefault("intro", "")
         page_url = f"{base_url}{b['slug']}/"
+        request, response = mcp_exchange(b)
         ctx = {
             "site": site,
             "b": b,
             "page_url": page_url,
             "index_url": index_url_from_page,
             "signature": signature(b["demo"]["tool"]),
-            "example_request": pretty({"name": b["demo"]["tool"]["name"],
-                                       "arguments": b["demo"]["example_request"]}),
-            "example_response": pretty(b["demo"]["example_response"]),
+            "request_body": pretty(request),
+            "response_body": pretty(response),
             "pricing": b.get("pricing", site["pricing"]),
-            "newsletter": b.get("newsletter", site["newsletter"]),
             "faq": list(b["faq"]) + list(site.get("common_faq", [])),
             "siblings": siblings,
             "related": [{"name": by_slug[r]["name"], "url": url_for(r)} for r in b.get("related", [])],
@@ -284,8 +304,7 @@ def build(args: argparse.Namespace) -> None:
     (out / "index.html").write_text(index_tpl.render(home_ctx), encoding="utf-8")
     (out / "llms.txt").write_text(index_llms_tpl.render(home_ctx), encoding="utf-8")
     (out / "tools.json").write_text(pretty({
-        "x-status": "static mockup, not a live MCP server",
-        "tools": [dict(tool_def(b), **{"x-page": f"{base_url}{b['slug']}/"}) for b in businesses],
+        "tools": [dict(tool_def(b), **{"page": f"{base_url}{b['slug']}/"}) for b in businesses],
     }) + "\n", encoding="utf-8")
     (out / ".nojekyll").write_text("", encoding="utf-8")
     print(f"built index        -> {out / 'index.html'}")

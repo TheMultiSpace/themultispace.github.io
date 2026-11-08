@@ -3,43 +3,43 @@ order: 6
 name: Open Bids
 accent: "#15803d"
 accent_dark: "#86efac"
-tagline: Say what you need and your maximum price. Providers compete for the job.
-audience: For people and businesses buying services that are usually quoted, not listed.
+tagline: Say what you need and the most you'll pay. Providers compete for the job.
+audience: For people and businesses buying services that are usually quoted, not listed with a fixed price.
 
 problem: |
-  Getting three quotes for a move, a repair or a delivery takes calls, emails and follow-ups. Most people take the first reasonable price because comparing is too much work.
+  Getting three quotes for a move, a repair or a delivery means calls, emails and follow-ups. Most people give up and take the first reasonable price, because comparing is simply too much work.
 
-  Providers lose out too: they spend time quoting jobs that were never going to happen.
+  Providers lose out too: they spend hours writing quotes for jobs that were never going to happen.
 
 how_it_works:
-  - title: Post your request
-    text: Describe the job, the deadline and the most you are willing to pay.
+  - title: Post your request once
+    text: Describe the job, your deadline and the most you are willing to pay.
   - title: Providers bid
-    text: Their agents send offers within your limits, with dates and conditions.
+    text: Interested providers — often through their own AI agents — send offers within your limits, with dates and conditions.
   - title: You pick one
-    text: Compare offers side by side, or let your agent choose using your rules.
+    text: Compare the offers side by side, or let your agent choose automatically using rules you set.
 
 benefits:
   - title: Real competition without the phone calls
-    text: Several offers arrive without you contacting anyone.
+    text: Several offers arrive after a single request — you contact no one.
   - title: Your ceiling, not theirs
-    text: Offers above your maximum never reach you.
+    text: Offers above your maximum never even reach you.
   - title: Offers you can compare
-    text: Every bid follows the same format, so price, timing and conditions line up.
+    text: Every bid arrives in the same format, so price, timing and conditions line up at a glance.
   - title: Serious buyers for providers
-    text: Providers only see requests with a stated budget and deadline.
+    text: Providers only see requests with a stated budget and deadline, so their time is not wasted either.
 
 audiences:
   - label: For buyers
-    pitch: Get competing offers for your job by posting it once, and only see the ones within your budget.
+    pitch: Post your job once and get competing offers, seeing only the ones inside your budget.
   - label: For providers
-    pitch: See requests that come with a confirmed budget and deadline, and bid only on the ones you want.
+    pitch: See requests that already have a confirmed budget and deadline, and bid only on the ones you actually want.
   - label: For agents
     agent: true
     pitch: post_request(job, deadline, max_price) opens a request; list_bids(request_id) returns offers in a common format.
 
 demo:
-  intro: A buyer's agent posts a small house move and checks the offers.
+  intro: A buyer's AI agent posts a small house move and reviews the offers that came back.
   tool:
     name: list_bids
     description: List the offers received for an open request.
@@ -47,11 +47,11 @@ demo:
       - name: request_id
         type: string
         required: true
-        description: The request returned by post_request.
+        description: The request returned when it was posted with post_request.
       - name: sort
         type: string
         required: false
-        description: price, date or rating.
+        description: How to order the offers — by price, date or rating.
     returns: Offers with price, date, provider and conditions, in a common format.
   example_request:
     request_id: "req_2207"
@@ -73,8 +73,8 @@ faq:
   - q: What kinds of jobs fit?
     a: Jobs that are normally quoted rather than priced on a website, such as moves, repairs, deliveries and small projects.
   - q: Do I have to accept any bid?
-    a: No. A request can close without a winner.
+    a: No. A request can close without a winner, and you owe nothing.
   - q: Can providers see each other's bids?
-    a: No. Each provider only sees the request and their own offer.
+    a: No. Each provider only sees the request and their own offer, so they compete on their best price, not on guesswork.
 
 related: [disputes, router]

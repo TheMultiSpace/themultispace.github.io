@@ -4,10 +4,9 @@
 
 {{ b.audience }}
 
-Status: {{ b.status }} (static mockup, no live server yet)
 Pricing: {{ pricing.headline }}
 Page: {{ page_url }}
-Tool definitions: {{ page_url }}tools.json
+Tool definition: {{ page_url }}tools.json
 
 ## Problem
 
@@ -18,7 +17,7 @@ Tool definitions: {{ page_url }}tools.json
 {% for step in b.how_it_works %}{{ loop.index }}. {{ step.title }}: {{ step.text }}
 {% endfor %}
 
-## What you get
+## Why it's useful
 
 {% for item in b.benefits %}- {{ item.title }}: {{ item.text }}
 {% endfor %}
@@ -40,12 +39,13 @@ Inputs:
 
 Returns: {{ b.demo.tool.returns }}
 
+Request:
+{{ request_body }}
+
+Response:
+{{ response_body }}
+
 ## Questions
 
 {% for item in faq %}- {{ item.q }} {{ item.a }}
-{% endfor %}
-
-## Updates
-
-{% for l in newsletter.links %}- {{ l.label }}: {{ l.url }}
 {% endfor %}

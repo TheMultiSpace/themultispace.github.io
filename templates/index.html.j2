@@ -98,13 +98,11 @@ p { margin: 0 0 1em; max-width: var(--measure); }
 .endpoints dt { font: 500 .95rem/1.4 var(--mono); }
 .endpoints dd { margin: 6px 0 0; color: var(--muted); font-size: .95rem; }
 
-/* Pricing, FAQ, updates */
+/* Pricing and FAQ */
 .price { font-size: clamp(1.8rem, 4vw, 2.6rem); font-weight: 700; color: var(--brand); margin-bottom: 12px; }
 .faq details { border-bottom: 1px solid var(--line); padding: 16px 0; max-width: 80ch; }
 .faq summary { cursor: pointer; font-weight: 600; font-size: 1.05rem; }
 .faq details p { margin: 10px 0 0; color: var(--muted); }
-.updates { background: var(--brand-soft); }
-.updates .actions { margin-top: 20px; }
 footer { padding: 32px 0 48px; border-top: 1px solid var(--line); font-size: .95rem; color: var(--muted); }
 
 @media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth; } }
@@ -118,7 +116,6 @@ footer { padding: 32px 0 48px; border-top: 1px solid var(--line); font-size: .95
     <nav aria-label="Sections">
       <a href="#services">Services</a>
       <a href="#agents">For agents</a>
-      <a class="optional" href="#updates">Updates</a>
     </nav>
   </header>
 </div>
@@ -133,7 +130,6 @@ footer { padding: 32px 0 48px; border-top: 1px solid var(--line); font-size: .95
     </div>
     <div class="actions">
       <a class="btn primary" href="#services">See the {{ count }} services</a>
-      <a class="btn secondary" href="#updates">Get early access</a>
     </div>
     <div class="who">
       <div>
@@ -150,7 +146,7 @@ footer { padding: 32px 0 48px; border-top: 1px solid var(--line); font-size: .95
   <section id="services" aria-labelledby="services-h">
     <div class="wrap">
       <h2 id="services-h">Services</h2>
-      <p class="sub">Each one solves a single problem. Open a service to see how it works, who it is for and a demo of the tool your agent would call.</p>
+      <p class="sub">Each one solves a single problem. Open a service to see how it works, who it is for, and the tool an agent calls.</p>
       {% for g in groups %}
       <div class="group">
         <h3>{{ g.title }}</h3>
@@ -180,7 +176,7 @@ footer { padding: 32px 0 48px; border-top: 1px solid var(--line); font-size: .95
         </div>
         <div>
           <dt><a href="tools.json">/tools.json</a></dt>
-          <dd>All {{ count }} tool definitions with input schemas and a worked example each.</dd>
+          <dd>All {{ count }} tool definitions, each with its schema, request and response.</dd>
         </div>
         <div>
           <dt>/&lt;service&gt;/tools.json</dt>
@@ -209,23 +205,11 @@ footer { padding: 32px 0 48px; border-top: 1px solid var(--line); font-size: .95
       {% endfor %}
     </div>
   </section>
-
-  <section id="updates" class="updates" aria-labelledby="updates-h">
-    <div class="wrap">
-      <h2 id="updates-h">{{ site.newsletter.headline }}</h2>
-      <p>{{ site.newsletter.text }}</p>
-      <div class="actions">
-        {% for l in site.newsletter.links %}
-        <a class="btn {{ 'primary' if loop.first else 'secondary' }}" href="{{ l.url }}" rel="noopener">Follow on {{ l.label }}</a>
-        {% endfor %}
-      </div>
-    </div>
-  </section>
 </main>
 
 <footer>
   <div class="wrap">
-    <p>{{ site.family_name }}: {{ site.family_tagline }} Contact: <a href="mailto:{{ site.contact_email }}">{{ site.contact_email }}</a></p>
+    <p>{{ site.family_name }}. {{ site.family_tagline }}</p>
   </div>
 </footer>
 

@@ -3,43 +3,43 @@ order: 5
 name: Verified Facts
 accent: "#0369a1"
 accent_dark: "#7dd3fc"
-tagline: Ground truth for agents, with a timestamp and evidence on every answer.
-audience: For teams building agents that act on facts about the real world.
+tagline: Facts your AI agent can trust — with a timestamp and the evidence attached.
+audience: For teams building AI agents that act on facts about the real world, and for anyone whose agent makes decisions based on them.
 
 problem: |
-  Agents act on what they read: opening hours, prices, stock levels, whether a listing exists. Much of that information online is stale, and more of it is now written by other agents to influence yours.
+  AI agents act on what they read: opening hours, prices, stock levels, whether a listing really exists. Much of that information online is out of date — and more of it is now written by other companies' agents, designed to influence yours.
 
-  When an agent acts on a wrong fact, the mistake is not a bad answer. It is a wasted trip, a failed booking or a purchase that should not have happened.
+  When an agent acts on a wrong fact, the result is not just a bad answer. It is a wasted trip, a failed booking or a purchase that should never have happened.
 
 how_it_works:
   - title: Your agent asks a question
-    text: It states the claim to check and how fresh the answer needs to be.
+    text: It states the claim it wants to check and how fresh the answer needs to be.
   - title: We check the sources
     text: Official feeds, direct checks with the business and, when needed, a person on the ground.
   - title: You get evidence, not just an answer
-    text: Every result comes with when it was checked, how, and where the evidence is.
+    text: Every result says when it was checked, how, and what it was based on — so you can see why it is trusted.
 
 benefits:
-  - title: Fresh answers
-    text: You set the maximum age of the information, from minutes to days.
+  - title: Freshness you choose
+    text: Set the maximum age of the information, from minutes to days. Anything older gets checked again.
   - title: Evidence attached
-    text: Each answer links to what it was based on, so your agent can show its reasoning.
+    text: Each answer links to what it was based on, so your agent — and you — can see the reasoning behind it.
   - title: Honest uncertainty
-    text: When something cannot be confirmed, the answer says "unknown" instead of guessing.
+    text: When something cannot be confirmed, the answer says "unknown" instead of guessing, so your agent knows to slow down.
   - title: One call for many kinds of facts
-    text: Opening hours, prices, availability, existence of a business or listing.
+    text: Opening hours, prices, availability, or whether a business or listing exists at all.
 
 audiences:
   - label: For agent builders
-    pitch: Stop your agent acting on stale or planted information. Check the facts that matter before it commits.
+    pitch: Stop your agent acting on stale or planted information. Check the facts that matter before it commits to anything.
   - label: For agents
     agent: true
     pitch: verify(claim, max_age) returns true, false or unknown with evidence, a timestamp and a confidence score.
   - label: For businesses
-    pitch: Publish your hours, prices and availability once, and have them checked and repeated correctly to every agent.
+    pitch: Publish your hours, prices and availability once, and have every AI assistant repeat them correctly.
 
 demo:
-  intro: An agent checks that a pharmacy is open before sending its user there.
+  intro: An agent checks that a pharmacy is really open before sending its user there.
   tool:
     name: verify
     description: Check a claim about the real world and return the answer with evidence.
@@ -51,7 +51,7 @@ demo:
       - name: max_age
         type: string
         required: false
-        description: Oldest acceptable evidence, as an ISO 8601 duration such as PT1H.
+        description: The oldest evidence you will accept. PT1H means checked within the last hour.
     returns: true, false or unknown, with evidence, the check time, the method and a confidence score.
   example_request:
     claim: "Corner Pharmacy on Main Street is open right now"
@@ -67,10 +67,10 @@ demo:
 
 faq:
   - q: What happens when you cannot confirm something?
-    a: The answer is "unknown", along with what was tried. Your agent decides what to do next.
+    a: The answer comes back as "unknown", along with what was tried. Your agent then decides what to do next — ask, wait or look elsewhere.
   - q: Which kinds of facts can I check?
-    a: We start with opening hours, prices, availability and whether a business or listing exists, and add more based on demand.
+    a: Opening hours, prices, availability, and whether a business or listing exists.
   - q: Can I see how an answer was reached?
-    a: Yes. Every answer lists its sources and the time each was checked.
+    a: Yes. Every answer lists its sources and the time each one was checked.
 
 related: [humans, router]

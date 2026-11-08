@@ -4,7 +4,6 @@
 
 {{ home.intro | trim }}
 
-Status: Concept (static mockups, no live servers yet)
 Pricing: {{ site.pricing.headline }}
 Home: {{ base_url }}
 All tool definitions: {{ base_url }}tools.json
@@ -33,9 +32,3 @@ Tool: {{ s.signature }}
 
 {% for item in faq %}- {{ item.q }} {{ item.a }}
 {% endfor %}
-
-## Updates
-
-{% for l in site.newsletter.links %}- {{ l.label }}: {{ l.url }}
-{% endfor %}
-Contact: {{ site.contact_email }}

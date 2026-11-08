@@ -3,11 +3,11 @@ order: 12
 name: Agent Spend
 accent: "#a16207"
 accent_dark: "#fde047"
-tagline: See every euro your agents spend, and cap it per agent and per task.
-audience: For people and teams paying for agents, tools and the things agents buy.
+tagline: See every euro your AI agents spend, and cap it — per agent, per task, per day.
+audience: For people and teams who pay for AI agents, their tools, and the things agents buy for them.
 
 problem: |
-  Agents spend money in many small ways: API calls, subscriptions, tool fees and purchases on your behalf. Each charge shows up somewhere different, if it shows up at all.
+  AI agents spend money in many small ways: API calls, subscriptions, tool fees and purchases made on your behalf. Each charge appears somewhere different — if it appears at all.
 
   By the time the monthly bill arrives, nobody can say which agent spent what, or why.
 
@@ -15,23 +15,23 @@ how_it_works:
   - title: Connect your accounts
     text: Link the cards, API accounts and tools your agents use.
   - title: See spending by agent and task
-    text: Every charge is matched to the agent and the task that caused it.
+    text: Every charge is matched to the agent that made it and the task it was working on.
   - title: Set caps
-    text: Limit spending per agent, per task or per day. Anything over the cap waits for you.
+    text: Limit spending per agent, per task or per day. Anything over the cap pauses and waits for you.
 
 benefits:
   - title: One view of all agent spending
-    text: Purchases, API usage and subscriptions together, in one dashboard.
-  - title: Know what each task cost
-    text: See the full cost of a task, from the model calls to the final purchase.
+    text: Purchases, API usage and subscriptions together on a single dashboard.
+  - title: Know what each task really cost
+    text: See the full cost of a job, from the model calls at the start to the final purchase.
   - title: Caps that stop surprises
     text: Spending pauses at the limit you set, instead of appearing on next month's bill.
   - title: Reports for your accountant
-    text: Export spending by agent, project or category.
+    text: Export spending by agent, project or category whenever you need it.
 
 audiences:
   - label: For people
-    pitch: Know what your agents are costing you, and stop any of them from spending more than you planned.
+    pitch: Know what your agents are costing you, and stop any of them spending more than you planned.
   - label: For teams and finance
     pitch: Treat agents like a cost centre. See what each one spends, set budgets and export reports.
   - label: For agents
@@ -39,7 +39,7 @@ audiences:
     pitch: check_budget(agent_id, amount) returns whether a charge fits the remaining budget before the agent commits to it.
 
 demo:
-  intro: An agent checks its budget before paying for a premium data report.
+  intro: An agent checks its remaining budget before paying for a premium data report.
   tool:
     name: check_budget
     description: Check whether a planned charge fits within an agent's remaining budget.
@@ -51,11 +51,11 @@ demo:
       - name: amount
         type: object
         required: true
-        description: Value and currency of the planned charge.
+        description: The value and currency of the planned charge.
       - name: task_id
         type: string
         required: false
-        description: The task the charge belongs to.
+        description: The task the charge belongs to, so costs add up per job.
     returns: Whether the charge fits, the remaining budget for the agent and the task, and the budget period.
   example_request:
     agent_id: "agt_research"
@@ -70,7 +70,7 @@ demo:
 
 faq:
   - q: Does it move money?
-    a: No. It reads your accounts and enforces caps through the tools you already use.
+    a: No. It reads your accounts and enforces caps through the tools you already use — your money stays where it is.
   - q: What counts as agent spending?
     a: Model and API usage, tool subscriptions, and purchases an agent makes for you.
   - q: Can I set different caps for different agents?

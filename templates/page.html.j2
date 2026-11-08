@@ -69,10 +69,6 @@ p { margin: 0 0 1em; max-width: var(--measure); }
 /* Top bar */
 .topbar { display: flex; justify-content: space-between; align-items: center; gap: 16px; padding: 20px 0; font-size: .95rem; }
 .topbar .family { color: var(--muted); text-decoration: none; }
-.status {
-  display: inline-block; padding: 3px 10px; border-radius: 999px;
-  border: 1px solid var(--accent); color: var(--ink); font-size: .85rem; font-weight: 500;
-}
 
 /* Hero */
 .hero { padding: 40px 0 64px; }
@@ -119,12 +115,13 @@ p { margin: 0 0 1em; max-width: var(--measure); }
 .audience-card.agent { border-color: var(--accent); background: var(--accent-soft); }
 .audience-card.agent p { font-family: var(--mono); font-size: .9rem; color: var(--ink); }
 
-/* Demo */
-.demo-intro { color: var(--muted); }
-.mockup-note { font-size: .9rem; color: var(--muted); }
-.demo { display: grid; gap: 24px; margin-top: 24px; }
-@media (min-width: 900px) { .demo { grid-template-columns: 5fr 6fr; align-items: start; } }
-.demo > * { min-width: 0; }
+/* Tool */
+.tool-intro { color: var(--muted); }
+.tool-meta { font-size: .95rem; }
+.tool-meta a { overflow-wrap: anywhere; }
+.tool-grid { display: grid; gap: 24px; margin-top: 24px; }
+@media (min-width: 900px) { .tool-grid { grid-template-columns: 5fr 6fr; align-items: start; } }
+.tool-grid > * { min-width: 0; }
 .tool-card { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 24px; }
 .tool-card .tool-name { font: 500 1.1rem/1.3 var(--mono); color: var(--accent); margin: 0 0 10px; overflow-wrap: anywhere; }
 .tool-card table { width: 100%; border-collapse: collapse; font-size: .92rem; margin-top: 16px; }
@@ -151,10 +148,6 @@ pre {
 .faq summary { cursor: pointer; font-weight: 600; font-size: 1.05rem; }
 .faq details p { margin: 10px 0 0; color: var(--muted); }
 
-/* Newsletter */
-.updates { background: var(--accent-soft); }
-.updates .links { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 20px; }
-
 /* Footer */
 footer { padding: 40px 0 56px; border-top: 1px solid var(--line); font-size: .95rem; color: var(--muted); }
 footer .cols { display: grid; gap: 28px; }
@@ -175,7 +168,6 @@ footer .related { margin-top: 12px; }
 <div class="wrap">
   <header class="topbar">
     <a class="family" href="{{ index_url }}">{{ site.family_name }}</a>
-    <span class="status">{{ b.status }}</span>
   </header>
 
   <!-- 1. Hero -->
@@ -184,11 +176,11 @@ footer .related { margin-top: 12px; }
     <h1>{{ b.tagline }}</h1>
     <p class="audience">{{ b.audience }}</p>
     <div class="signature" aria-label="Tool signature for AI agents">
-      <small>What an agent sees</small>{{ signature }}
+      <small>The tool an AI agent can call</small>{{ signature }}
     </div>
     <div class="actions">
-      <a class="btn primary" href="#demo">See the demo</a>
-      <a class="btn secondary" href="#updates">Get updates</a>
+      <a class="btn primary" href="#tool">See the tool</a>
+      <a class="btn secondary" href="tools.json">Tool definition</a>
     </div>
   </div>
 </div>
@@ -217,7 +209,7 @@ footer .related { margin-top: 12px; }
   <!-- 4. What you get -->
   <section aria-labelledby="get-h">
     <div class="wrap">
-      <h2 id="get-h">What you get</h2>
+      <h2 id="get-h">Why it's useful</h2>
       <dl class="benefits">
         {% for item in b.benefits %}
         <div><dt>{{ item.title }}</dt><dd>{{ item.text }}</dd></div>
@@ -241,13 +233,13 @@ footer .related { margin-top: 12px; }
     </div>
   </section>
 
-  <!-- 6. Demo (MCP mockup) -->
-  <section id="demo" aria-labelledby="demo-h">
+  <!-- 6. Tool -->
+  <section id="tool" aria-labelledby="tool-h">
     <div class="wrap">
-      <h2 id="demo-h">Demo</h2>
-      {% if b.demo.intro %}<p class="demo-intro">{{ b.demo.intro }}</p>{% endif %}
-      <p class="mockup-note">This is a static mockup of the MCP tool. The full definition is in <a href="tools.json">tools.json</a>.</p>
-      <div class="demo">
+      <h2 id="tool-h">The tool</h2>
+      {% if b.demo.intro %}<p class="tool-intro">{{ b.demo.intro }}</p>{% endif %}
+      <p class="tool-meta">Agents call <code>{{ b.demo.tool.name }}</code> over MCP. Definition: <a href="tools.json">{{ page_url }}tools.json</a>.</p>
+      <div class="tool-grid">
         <div class="tool-card">
           <p class="tool-name">{{ b.demo.tool.name }}</p>
           <p>{{ b.demo.tool.description }}</p>
@@ -267,12 +259,12 @@ footer .related { margin-top: 12px; }
         </div>
         <div>
           <div class="code-block">
-            <h3>Example call</h3>
-            <pre><code>{{ example_request }}</code></pre>
+            <h3>Request</h3>
+            <pre><code>{{ request_body }}</code></pre>
           </div>
           <div class="code-block">
-            <h3>Example result</h3>
-            <pre><code>{{ example_response }}</code></pre>
+            <h3>Response</h3>
+            <pre><code>{{ response_body }}</code></pre>
           </div>
         </div>
       </div>
@@ -298,18 +290,6 @@ footer .related { margin-top: 12px; }
     </div>
   </section>
 
-  <!-- 9. Stay updated -->
-  <section id="updates" class="updates" aria-labelledby="updates-h">
-    <div class="wrap">
-      <h2 id="updates-h">{{ newsletter.headline }}</h2>
-      <p>{{ newsletter.text }}</p>
-      <div class="links">
-        {% for l in newsletter.links %}
-        <a class="btn {{ 'primary' if loop.first else 'secondary' }}" href="{{ l.url }}" rel="noopener">Follow on {{ l.label }}</a>
-        {% endfor %}
-      </div>
-    </div>
-  </section>
 </main>
 
 <!-- 10. Footer -->
@@ -318,7 +298,6 @@ footer .related { margin-top: 12px; }
     <div>
       <h2>{{ site.family_name }}</h2>
       <p>{{ site.family_tagline }}</p>
-      <p>Status: {{ b.status }}. Contact: <a href="mailto:{{ site.contact_email }}">{{ site.contact_email }}</a></p>
     </div>
     <div>
       <h2>All services</h2>

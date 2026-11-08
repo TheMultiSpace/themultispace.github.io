@@ -2,8 +2,7 @@
 
 base_url: https://themultispace.github.io/  # pages are published at <base_url><slug>/
 family_name: TheMultiSpace                 # shown in the footer and on the index page
-family_tagline: The missing services of the agent economy, for the people who use agents and the agents themselves.
-contact_email: hello@example.com
+family_tagline: Useful services for a world where AI assistants do tasks on your behalf.
 
 # Home page (index.html and the root llms.txt). Written for customers and their agents.
 home:
@@ -23,7 +22,7 @@ home:
   for_agents:
     title: For agents
     text: >-
-      Every service is one MCP-style tool with a typed request and response. Read
+      Every service is one MCP tool with a typed request and response. Read
       llms.txt for the catalogue, or tools.json for every tool definition at once.
   # Every business slug must appear in exactly one group.
   groups:
@@ -44,35 +43,25 @@ home:
         and the teams who build them. Each service page says who it is for.
     - q: Can my agent use these services directly?
       a: >-
-        That is the design. Each service is a single tool with a typed schema, published
-        in tools.json next to its page and collected in the root tools.json.
-
-status_default: Concept
+        Yes. Each service is a single tool with a typed schema, published in
+        tools.json next to its page and collected in the root tools.json.
 
 pricing:
-  headline: Free for a limited time
+  headline: Free
   text: >-
-    Everything on this page is free to use while we are in this early phase.
-    Paid plans, if any, will be announced to newsletter subscribers first.
-
-newsletter:
-  headline: Stay updated
-  text: >-
-    We publish progress notes, new demos and early-access invitations.
-    Follow along wherever you read.
-  links:
-    - label: Substack
-      url: https://example.substack.com
-    - label: Bluesky
-      url: https://bsky.app/profile/example.com
-    # - label: LinkedIn
-    #   url: https://www.linkedin.com/company/example
+    This service is free to use.
 
 # FAQ items appended to every page, after the product-specific ones.
 common_faq:
-  - q: What does "Concept" mean?
+  - q: What is an AI agent?
     a: >-
-      The service is being designed in the open. The demo shows how it will
-      work, but it is a static mockup and is not connected to a live server yet.
-  - q: How do I get access when it launches?
-    a: Follow us on one of the channels in the "Stay updated" section.
+      Software that carries out tasks for you — researching, booking, buying,
+      sending messages — instead of only answering questions. AI assistants
+      are becoming agents as they gain the ability to act, and every service
+      on this site is built for that world. You do not need to use one
+      yourself to benefit from most of these services.
+  - q: How does an agent call this service?
+    a: >-
+      Through MCP (Model Context Protocol), the standard agents use to call
+      tools. This page publishes the tool, its inputs, and a call with the
+      response that comes back. The same definition is in tools.json.

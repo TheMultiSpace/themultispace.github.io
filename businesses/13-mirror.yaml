@@ -4,34 +4,34 @@ name: AI Mirror
 accent: "#9d174d"
 accent_dark: "#f9a8d4"
 tagline: Find out what AI assistants tell people about your business.
-audience: For business owners who want to know how they look to AI assistants.
+audience: For business owners who want to know how they look when customers ask an AI assistant.
 
 problem: |
-  More people now ask an AI assistant which plumber to call, which café to visit or which accountant to hire.
+  More and more customers ask an AI assistant which plumber to call, which café to visit or which accountant to hire.
 
-  You cannot see those conversations. The assistant may have your hours wrong, quote an old price or recommend the shop down the road.
+  You cannot see those conversations. The assistant might have your hours wrong, quote an old price, or recommend the shop down the road — and you would never know.
 
 how_it_works:
   - title: Enter your business
-    text: Your name, area and what you do. That is all it takes.
+    text: Just your name, your area and what you do. That is all it takes.
   - title: We ask the assistants
-    text: The questions your customers would ask are put to the major AI assistants.
+    text: The questions your customers actually ask are put to the major AI assistants.
   - title: Read your report
-    text: See what each assistant says, what it gets wrong and how to correct it.
+    text: See what each assistant says about you, what it gets wrong and how to put it right.
 
 benefits:
   - title: See what customers see
-    text: The actual answers assistants give about you and your competitors.
+    text: The actual answers assistants give about you — and about your competitors.
   - title: Spot the mistakes
-    text: Wrong hours, old prices and missing services, listed in one place.
+    text: Wrong hours, old prices and missing services, all listed in one place.
   - title: Know how to fix them
-    text: Each problem comes with the steps that help correct it.
+    text: Each problem comes with the practical steps that help correct it.
   - title: Track changes over time
-    text: Run the check again each month and see what improved.
+    text: Run the check again each month and watch what improves.
 
 audiences:
   - label: For business owners
-    pitch: See in two minutes what AI assistants tell people about your business, and what they get wrong.
+    pitch: In two minutes, see what AI assistants tell people about your business — and what they get wrong.
   - label: For marketing agencies
     pitch: Run the check for each client and show them a clear before-and-after.
   - label: For agents
@@ -39,7 +39,7 @@ audiences:
     pitch: assistant_snapshot(business, area, questions) returns what each assistant answers and which facts conflict with the business's own data.
 
 demo:
-  intro: A café owner checks what assistants say about them.
+  intro: A café owner checks what AI assistants say about their business.
   tool:
     name: assistant_snapshot
     description: Ask several AI assistants about a business and compare their answers with the business's own details.
@@ -55,7 +55,7 @@ demo:
       - name: questions
         type: array
         required: false
-        description: Customer-style questions to ask. Defaults to a standard set.
+        description: Customer-style questions to ask. If left out, a standard set is used.
     returns: Each assistant's answer, whether the business was recommended, and a list of facts that are wrong or missing.
   example_request:
     business: "The Little Bean"
@@ -78,8 +78,8 @@ faq:
   - q: Which assistants do you check?
     a: The most widely used general-purpose AI assistants. The report names each one.
   - q: Can you change what an assistant says?
-    a: Not directly. The report shows which sources the assistants rely on and how to correct them.
+    a: Not directly. The report shows which public sources the assistants rely on and how to correct them.
   - q: Do I need to connect anything?
-    a: No. The check works from your business name and area.
+    a: No. The check works from your business name and area alone.
 
 related: [frontdesk, facts]

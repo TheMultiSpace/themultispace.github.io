@@ -7,14 +7,14 @@ service the agent economy is missing.
 
 | Path | What it is |
 | --- | --- |
-| `site.yaml` | Shared settings: base URL, pricing, newsletter links, common FAQ |
-| `businesses/*.yaml` | One file per service (name, pitch, demo tool, FAQ) |
+| `site.yaml` | Shared settings: base URL, pricing, common FAQ |
+| `businesses/*.yaml` | One file per service (name, pitch, MCP tool, FAQ) |
 | `templates/` | Jinja templates for the pages, `llms.txt` and the index |
 | `build.py` | Generates `dist/` from the above |
 | `pyproject.toml`, `uv.lock` | Dependencies, managed with [uv](https://docs.astral.sh/uv/) |
 
 Each service is published at `https://themultispace.github.io/<slug>/`, together with
-`llms.txt` (plain-text summary for AI agents) and `tools.json` (MCP-style tool definition, mockup).
+`llms.txt` (plain-text summary for AI agents) and `tools.json` (MCP tool definition, request and response).
 
 ## Build locally
 
@@ -35,5 +35,5 @@ Source** to **GitHub Actions** (one-time).
 ## Adding a service
 
 Copy a file in `businesses/`, change `slug`, `order` and the content, then build. The build
-checks required fields, slug format, colours, `related` slugs and that the demo example matches
-the tool's declared inputs.
+checks required fields, slug format, colours, `related` slugs and that the recorded
+call matches the tool's declared inputs.

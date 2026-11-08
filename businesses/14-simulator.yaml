@@ -3,31 +3,31 @@ order: 14
 name: Agent Simulator
 accent: "#4d7c0f"
 accent_dark: "#bef264"
-tagline: Test your agent against realistic fake shops, banks and airlines before it touches real ones.
-audience: For teams building agents that buy, book, pay or sign on someone's behalf.
+tagline: Test your AI agent against simulated shops, banks and airlines before it touches real ones.
+audience: For teams building AI agents that will buy, book, pay or sign on someone's behalf.
 
 problem: |
   You cannot test a booking agent by booking real flights, and you cannot test a payment agent with real money.
 
-  So most agents meet their first difficult situation in production: a sold-out flight, a changed price, a seller who tries to trick them.
+  So most agents meet their first difficult situation in the real world, in front of a customer: a sold-out flight, a price that changes mid-checkout, a seller trying to trick them.
 
 how_it_works:
   - title: Pick a world
-    text: Choose from simulated airlines, shops, banks, landlords and marketplaces.
+    text: Choose from simulated airlines, shops, banks, landlords and marketplaces that behave like the real thing.
   - title: Choose the scenarios
-    text: Normal days, sold-out stock, price changes mid-checkout, hostile sellers and slow services.
+    text: Normal days, sold-out stock, prices changing mid-checkout, hostile sellers and slow services.
   - title: Read the results
-    text: See where your agent succeeded, where it failed and what it did at each step.
+    text: See where your agent succeeded, where it failed and exactly what it did at each step.
 
 benefits:
   - title: Find failures early
-    text: Problems show up in rehearsal instead of in front of a customer.
+    text: Problems show up in rehearsal, not in front of a paying customer.
   - title: Realistic difficulty
-    text: Scenarios include the awkward cases real services produce, not only the happy path.
+    text: Scenarios include the awkward cases real services produce — not just the happy path.
   - title: Repeatable tests
-    text: Run the same scenarios after every change and compare the results.
+    text: Run the same scenarios after every change to your agent and compare the results side by side.
   - title: Adversarial cases included
-    text: Test how your agent handles misleading offers and manipulative counterparties.
+    text: See how your agent handles misleading offers and manipulative counterparties before it meets real ones.
 
 audiences:
   - label: For agent builders
@@ -39,7 +39,7 @@ audiences:
     pitch: start_scenario(world, scenario) returns sandbox endpoints that behave like the real services, plus a run ID for the results.
 
 demo:
-  intro: A team tests its travel agent against a flight that sells out mid-booking.
+  intro: A team tests its travel agent against a flight that sells out in the middle of the booking.
   tool:
     name: start_scenario
     description: Start a simulated world with a chosen scenario and return its sandbox endpoints.
@@ -47,15 +47,15 @@ demo:
       - name: world
         type: string
         required: true
-        description: The simulated environment, such as airline, shop or bank.
+        description: The simulated environment to use, such as airline, shop or bank.
       - name: scenario
         type: string
         required: true
-        description: The situation to test.
+        description: The situation to test, from the scenario list.
       - name: seed
         type: integer
         required: false
-        description: Fix this to make a run repeatable.
+        description: Fix this number to make a run exactly repeatable.
     returns: A run ID, sandbox endpoints for the simulated services, and a link to the run report.
   example_request:
     world: airline
@@ -71,9 +71,9 @@ demo:
 
 faq:
   - q: Do I need to change my agent to use it?
-    a: Point its tools at the sandbox endpoints instead of the real ones. Nothing else changes.
+    a: Point its tools at the sandbox (practice) endpoints instead of the real ones. Nothing else changes.
   - q: Can I write my own scenarios?
-    a: Yes. Scenarios are described in plain files you can edit and share.
+    a: Yes. Scenarios are described in plain files you can edit and share with your team.
   - q: How do I read the results?
     a: Each run produces a step-by-step report of what the agent saw, decided and did.
 
