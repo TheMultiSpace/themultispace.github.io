@@ -1,7 +1,7 @@
 [project]
 name = "themultispace-github-io"
 version = "0.1.0"
-description = "Static site generator for themultispace.github.io"
+description = "Static site generator for themultispace.com"
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [

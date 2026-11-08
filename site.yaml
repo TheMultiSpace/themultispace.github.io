@@ -1,7 +1,7 @@
 # Settings shared by every page. Edit these before building.
 
-base_url: https://themultispace.github.io/  # pages are published at <base_url><slug>/
-family_name: TheMultiSpace                 # shown in the footer and on the index page
+base_url: https://themultispace.com/  # pages are published at <base_url><slug>/
+family_name: MultiSpace                    # shown in the footer and on the index page
 family_tagline: Useful services for a world where AI assistants do tasks on your behalf.
 
 # Home page (index.html and the root llms.txt). Written for customers and their agents.
@@ -12,7 +12,7 @@ home:
     was built for people: paying safely, proving who they are, getting someone to look
     at something in person, or settling a dispute when an order goes wrong.
 
-    TheMultiSpace builds those missing pieces. Each service does one job, works for
+    MultiSpace builds those missing pieces. Each service does one job, works for
     people through a simple page, and works for agents through a single tool call.
   for_people:
     title: For people and businesses
@@ -37,7 +37,7 @@ home:
     - title: Build better agents
       slugs: [facts, router, simulator]
   faq:
-    - q: Who is TheMultiSpace for?
+    - q: Who is MultiSpace for?
       a: >-
         People and businesses who use AI agents, businesses that want to sell to them,
         and the teams who build them. Each service page says who it is for.

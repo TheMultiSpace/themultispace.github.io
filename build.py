@@ -307,6 +307,9 @@ def build(args: argparse.Namespace) -> None:
         "tools": [dict(tool_def(b), **{"page": f"{base_url}{b['slug']}/"}) for b in businesses],
     }) + "\n", encoding="utf-8")
     (out / ".nojekyll").write_text("", encoding="utf-8")
+    host = base_url.split("://", 1)[-1].strip("/")
+    if host and not host.endswith(".github.io"):
+        (out / "CNAME").write_text(host + "\n", encoding="utf-8")
     print(f"built index        -> {out / 'index.html'}")
 
 

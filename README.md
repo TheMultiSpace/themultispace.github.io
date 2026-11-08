@@ -1,6 +1,6 @@
-# TheMultiSpace
+# MultiSpace
 
-Static site for [themultispace.github.io](https://themultispace.github.io/): one page per
+Static site for [themultispace.com](https://themultispace.com/): one page per
 service the agent economy is missing.
 
 ## Layout
@@ -13,7 +13,7 @@ service the agent economy is missing.
 | `build.py` | Generates `dist/` from the above |
 | `pyproject.toml`, `uv.lock` | Dependencies, managed with [uv](https://docs.astral.sh/uv/) |
 
-Each service is published at `https://themultispace.github.io/<slug>/`, together with
+Each service is published at `https://themultispace.com/<slug>/`, together with
 `llms.txt` (plain-text summary for AI agents) and `tools.json` (MCP tool definition, request and response).
 
 ## Build locally
